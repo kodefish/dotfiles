@@ -1,0 +1,381 @@
+* Emacs config
+This is my emacs config. It relies on org-babel to be cleary documented. Yay! 
+
+This file is heavily inspired from [[https://github.com/jamiecollinson/dotfiles/blob/master/config.org][Jamie Collinson]]. 
+
+* Setup
+** Configure package sources
+Add repositories from which we'll load packages. Setting ~package-enable-at-startup~ to ~nil~ prevents a second package load and slightly improves startup time.
+
+#+begin_src emacs-lisp
+  (setq package-enable-at-startup nil)
+  (setq package-archives '(("gnu" . "http://mirrors.163.com/elpa/gnu/")
+                           ("melpa" . "https://melpa.org/packages/")
+                           ("org" . "http://orgmode.org/elpa/")))
+#+end_src
+
+** Bootstrap use-package
+If ~use-package~ is not installed, install it.
+#+begin_src emacs-lisp
+  (unless (package-installed-p 'use-package)
+     (package-refresh-contents)
+     (package-install 'use-package)
+     (eval-when-compile (require 'use-package)))
+#+end_src
+
+By default, all packages should be installed from the package manager, as that's the usual path. This is equivalent to setting ~:ensure t~ on each call to ~use-package~. To disable, set ~:ensure nil~ (this is done automatically for any pacakges using ~:load-path~ sho shouldn't generally be needed).
+
+#+begin_src emacs-lisp
+(setq use-package-always-ensure t)
+#+end_src
+
+** Benchmark setup
+~benchmark-init~ records startup time by package so we can debug. It only records things after it's initialised, so put it in the config as early as possible.
+
+#+begin_src emacs-lisp
+(use-package benchmark-init
+    :config
+    ;; To disable collection of benchmark data after init is done
+    (add-hook 'after-init-hook 'benchmark-init/deactivate))
+
+(add-hook 'after-init-hook
+    (lambda () (message "loaded in %s" (emacs-init-time)))) 
+#+end_src
+
+** Increase garbage collector threshold
+The default garbage collector threshold is 800kB, increasing this to 10MB for startup increases speed.
+
+#+begin_src emacs-lisp
+(setq gc-cons-threshold 10000000)
+
+;; Restore after startup
+(add-hook 'after-init-hook
+    (lambda ()
+        (setq gc-cons-threshold 1000000)
+        (message "gc-cons-threshold restored to %S"
+                  gc-cons-threshold))) 
+#+end_src
+
+** Make it easy to edit this file
+#+begin_src emacs-lisp
+(defun find-config()
+    "Edit config.org"
+    (interactive)
+    (find-file "~/.emacs.d/config.org"))
+
+(global-set-key (kbd "C-c I") 'find-config)
+#+end_src
+
+** Set custom settings to load in own file
+This stops emacs from adding customized settings to ~init.el~ by creating a temporary file.
+
+#+begin_src emacs-lisp
+(setq custom-file (make-temp-file "emacs-custom"))
+#+end_src
+
+** Add custom packages to load path
+Add custom packages to load path (packages installed manually). Install any custom packages in =~/.emacs.d/lisp=.
+
+#+begin_src emacs-lisp
+(add-to-list 'load-path "~/.emacs.d/lisp")
+#+end_src
+
+** Record key frequency
+Because why not? Super useful to define new keybindings and increase ergonomics.
+
+#+begin_src emacs-lisp
+(use-package keyfreq
+    :config
+    (keyfreq-mode 1)
+    (keyfreq-autosave-mode 1))
+#+end_src
+
+* Preferences 
+Don't display help screen on startup
+#+begin_src emacs-lisp
+(setq inhibit-startup-screen t)
+#+end_src
+
+Enable line wrapping
+#+begin_src emacs-lisp
+(global-visual-line-mode 1)
+#+end_src
+
+Disable window decoration
+#+begin_src emacs-lisp
+(tool-bar-mode -1)
+(scroll-bar-mode -1)
+#+end_src
+
+Disable error bell
+#+begin_src emacs-lisp
+(setq ring-bell-function 'ignore)
+#+end_src
+
+Make ~yes-or-no~ promts shorter
+#+begin_src emacs-lisp
+(defalias 'yes-or-no-p 'y-or-n-p)
+#+end_src
+
+Centralise backup files (to declutter all the =filename#= files
+#+begin_src emacs-lisp
+(setq backup-directory-alist '(("." . "~/.emacs.d/backup"))
+  backup-by-copying t    ; Don't delink hardlinks
+  version-control t      ; Use version numbers
+  delete-old-versions t  ; Automatically delete excess backups
+  kept-new-versions 20   ; How many of the newest element to keep
+  kept-old-versions 5    ; How many of the old
+)
+#+end_src
+
+* Interface
+** Evil mode
+Evil mode emulate vim in emacs. Best of both worlds.
+#+begin_src emacs-lisp
+  (use-package evil
+    :config
+    (evil-mode 1)
+    ;; Make sure no mode can override evil keybindings
+    (setq evil-overriding-maps nil)
+    (setq evil-intercept-maps nil)
+    ;; Window navigation
+    (define-key evil-motion-state-map " " nil)   
+    (define-key evil-motion-state-map (kbd "SPC w h") 'evil-window-left)
+    (define-key evil-motion-state-map (kbd "SPC w j") 'evil-window-down)
+    (define-key evil-motion-state-map (kbd "SPC w k") 'evil-window-up)
+    (define-key evil-motion-state-map (kbd "SPC w l") 'evil-window-right)
+    (define-key evil-motion-state-map (kbd "SPC w d") 'evil-window-delete)
+    (define-key evil-motion-state-map (kbd "SPC w s") 'evil-window-split)
+    (define-key evil-motion-state-map (kbd "SPC w v") 'evil-window-vsplit)
+    ;; Change window size
+    (define-key evil-motion-state-map (kbd "C-h") 'evil-window-decrease-width)
+    (define-key evil-motion-state-map (kbd "C-j") 'evil-window-decrease-height)
+    (define-key evil-motion-state-map (kbd "C-k") 'evil-window-increase-height)
+    (define-key evil-motion-state-map (kbd "C-l") 'evil-window-increase-width)
+    ;; Buffer management
+    (define-key evil-motion-state-map (kbd "SPC b l") 'list-buffers)
+    (define-key evil-motion-state-map (kbd "SPC b k") 'kill-buffer)
+    (define-key evil-motion-state-map (kbd "SPC b n") 'next-buffer)
+    (define-key evil-motion-state-map (kbd "SPC b p") 'previous-buffer))
+
+#+end_src
+
+** Appearance
+Currently using the [[https://github.com/bbatsov/zenburn-emacs][zenburn theme]].
+
+#+begin_src emacs-lisp
+(use-package zenburn-theme
+    :config
+    (load-theme 'zenburn t))
+#+end_src
+
+Use ~feebleline~ as a minimal mode line replacement
+
+#+begin_src emacs-lisp
+(use-package feebleline
+    :config
+    (feebleline-mode 't))
+#+end_src
+
+Add emoji support because you never know.
+#+begin_src emacs-lisp
+(use-package emojify)
+#+end_src
+
+* TODO Coding
+** Programming specific interface improvements
+*** Neo-tree
+An Emcacs tree plugin like NerdTree for Vim
+#+begin_src emacs-lisp
+  (use-package neotree
+    :config
+    (global-set-key (kbd "M-t") 'neotree-toggle)
+    ;; When running 'projectile-switch-project-action, neotree will change root automatically
+    (setq projectile-switch-project-action 'neotree-projectile-action)
+     ;; Neotree highligts current file on open
+    (setq neo-smart-open t)
+    (add-hook 'neotree-mode-hook
+        (lambda ()
+            (define-key evil-normal-state-local-map (kbd "TAB") 'neotree-enter)
+            (define-key evil-normal-state-local-map (kbd "SPC") 'neotree-quick-look)
+            (define-key evil-normal-state-local-map (kbd "q") 'neotree-hide)
+            (define-key evil-normal-state-local-map (kbd "RET") 'neotree-enter)
+            (define-key evil-normal-state-local-map (kbd "g") 'neotree-refresh)
+            (define-key evil-normal-state-local-map (kbd "n") 'neotree-next-line)
+            (define-key evil-normal-state-local-map (kbd "p") 'neotree-previous-line)
+            (define-key evil-normal-state-local-map (kbd "A") 'neotree-stretch-toggle)
+            (define-key evil-normal-state-local-map (kbd "H") 'neotree-hidden-file-toggle))))
+#+end_src
+*** Relative line numbers
+Activate relative line numbers. Very useful when using vim keybindings. Toggle using =M-l=.
+#+begin_src emacs-lisp
+  (use-package linum-relative
+      :config
+      (global-set-key (kbd "M-l") 'linum-relative-mode))
+#+end_src
+
+*** Smart parens
+Minor mode to automatically insert pairs
+#+begin_src emacs-lisp
+  ;; (use-package smartparens
+    ;; :config
+    ;; (add-hook 'prog-mode-hook 'smartparens-mode))
+#+end_src
+
+*** Highlight parens
+Use rainbow colors to match parentheses. Especially useful for languages like Lisp. 
+#+begin_src emacs-lisp
+  (use-package rainbow-delimiters
+    :config
+    (add-hook 'prog-mode-hook 'rainbow-delimiters-mode))
+
+#+end_src
+
+*** Colorize strings
+Have the color of strings that represent colors be colored (nifty for front-end dev, android studio does this). Only highlight hex colors.
+#+begin_src emacs-lisp
+  (use-package rainbow-mode
+    :config
+    (setq rainbow-x-colors nil)
+    (add-hook 'prog-mode-hook 'rainbow-mode))
+#+end_src
+
+*** Expand parantheses
+Expand parantheses automatically, kinda like smartparens
+#+begin_src emacs-lisp
+(add-hook 'prog-mode-hook 'electric-pair-mode)
+
+#+end_src
+** Fuzzy search
+*** fzf
+=fzf= is a quick fuzzy finder
+#+begin_src emacs-lisp
+(use-package fzf)
+#+end_src
+** Environment management
+By default, emacs doesn't read from the same environment variables as the terminal. This package fixes that
+#+begin_src emacs-lisp
+  (use-package exec-path-from-shell
+    :config
+    (exec-path-from-shell-initialize))
+#+end_src
+** TODO Jump to source
+Because you need jump to source. Individual language packages often support IDE features like jump to source, but ~dumb-jump~ attempts to support many languages by simple searching. It's quite effective even with dynamic libraries like JS and Python.
+#+begin_src emacs-lisp
+  (use-package dumb-jump
+    ;; TODO: bind to something more friendly, maybe using general (spacemacs like bindings using SPC
+    :bind(("C-M-g" . dumb-jump-go)
+          ("C-M-p" . dumb-jump-back)
+          ("C-M-q" . dumb-jump-quick-look)))
+#+end_src
+** Company
+Company is a code completion front-end. It handles all the logic regarding code completion except actually creating the completions. It requries a completion backend (such as RTags or Irony).
+#+begin_src emacs-lisp
+  (use-package company
+    :config
+    (add-hook 'after-init-hook #'global-company-mode)
+    (global-set-key (kbd "C-SPC") 'company-complete-common-or-cycle)
+    (message "Company config")
+    (setq company-idle-delay 0))
+#+end_src
+
+** Flycheck
+Flycheck is a package for Emacs that brings on-the-fly syntax checking.
+#+begin_src emacs-lisp
+  (use-package flycheck
+    :config
+    (add-hook 'after-init-hook #'global-flycheck-mode))
+#+end_src
+** Irony
+Irony brings IDE functionality (code completion, real-time syntax checking, live documentation) to C, C++ and Objective-C.
+#+begin_src emacs-lisp
+  (use-package irony
+    :config
+    ;; If irony server was never installed, install it
+    (unless (irony--find-server-executable) (call-interactively #'irony-install-server))
+
+    (add-hook 'c++-mode-hook 'irony-mode)
+    (add-hook 'c-mode-hook 'irony-mode)
+
+    ;; Use compilation database first, clang_complete as a fallback
+    (setq-default irony-cdb-compilation-databases '(irony-cdb-libclang irony-cdb-clang-complete))
+    (add-hook 'irony-mode-hook 'irony-cdb-autosetup-compile-options)
+  )
+#+end_src
+*** Company autocomplete 
+Use =irony= with =company= for autocomplete.
+#+begin_src emacs-lisp
+  (use-package company-irony
+    :requires (company irony)
+    :config
+    (eval-after-load 'company '(add-to-list 'company-backends 'company-irony)))
+#+end_src
+
+*** Flycheck syntax checking
+#+begin_src emacs-lisp
+  (use-package flycheck-irony
+    :requires (flycheck irony)
+    :config
+    (eval-after-load 'flycheck '(add-hook 'flycheck-mode-hook #'flycheck-irony-setup)))
+#+end_src
+
+*** Eldoc documentation
+=Eldoc= shows a list of arguments for the function under the cursor in the echo area
+#+begin_src emacs-lisp
+  (use-package irony-eldoc
+    :requires (eldoc irony)
+    :config
+    (add-hook 'irony-mode-hook #'irony-eldoc)
+  )
+#+end_src
+** Omnisharp
+Omnisharp is a C# autocomplete backend package for emacs. It integrates with =company= as a frontend. Run =M-x omnisharp-install-server= to get the backend up and running.
+#+begin_src emacs-lisp
+  (use-package omnisharp
+    :config
+    (eval-after-load 'company '(add-to-list 'company-backends 'company-omnisharp))
+    (add-hook 'csharp-mode-hook #'company-mode))
+#+end_src
+** Projectile
+=projectile= teaches emacs the concept of a project. Some useful features are jumping to a file/buffer and switching from source file to corresponding header file.
+#+begin_src emacs-lisp
+  (use-package projectile
+    :ensure t
+    :config
+    (define-key evil-motion-state-map (kbd "SPC p") 'projectile-command-map)   
+    (setq projectile-project-search-path '("~/src/"))
+    (projectile-mode +1))
+#+end_src
+* Org
+Setup some ~org-mode~ specifics
+
+Turn on org templates
+#+begin_src emacs-lisp
+(require 'org-tempo)
+#+end_src
+
+Have org files be indented by default when opened
+#+begin_src emacs-lisp
+(setq org-startup-indented 't)
+#+end_src
+
+Set the main org directory
+#+begin_src emacs-lisp
+(setq org-directory "~/org")
+#+end_src
+
+Settings for source blocks in org files
+#+begin_src emacs-lisp
+(setq org-src-fontify-natively 't)
+(setq org-src-tab-acts-natively t)
+(setq org-src-window-setup 'current-window)
+#+end_src
+
+* Extras
+** Writing
+~writegood-mode~ highlights bad word choices and has functions for calculating readability.
+
+#+begin_src emacs-lisp
+(use-package writegood-mode
+    :bind ("C-c g" . writegood-mode))
+#+end_src

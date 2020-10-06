@@ -1,0 +1,7 @@
+#!/bin/bash
+
+CURRENT_PATH=$(pwd)
+echo $CURRENT_PATH
+ln -sv $CURRENT_PATH/emacs ~/.emacs
+mkdir ~/.emacs.d
+ln -sv $CURRENT_PATH/config.org ~/.emacs.d/config.org
