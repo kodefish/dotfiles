@@ -161,12 +161,32 @@ Evil mode emulate vim in emacs. Best of both worlds.
 #+end_src
 
 ** Appearance
-Currently using the [[https://github.com/bbatsov/zenburn-emacs][zenburn theme]].
+Currently using the [[https://github.com/bbatsov/zenburn-emacs][zenburn theme]] for dark and [[https://github.com/manuel-uberti/doneburn-theme][doneburn theme]] for light. I use =heaven-and-hell= to toggle between the two manually.
 
 #+begin_src emacs-lisp
-(use-package zenburn-theme
+  (use-package zenburn-theme
+      :ensure t)
+
+  (use-package anti-zenburn-theme
+      :ensure t)
+
+  (use-package material-theme
+      :ensure t)
+#+end_src
+
+#+begin_src emacs-lisp
+  (use-package heaven-and-hell
+    :ensure t
+    :init
+    (setq heaven-and-hell-theme-type 'dark) ;; Omit to use light by default
+    (setq heaven-and-hell-themes
+          '((light . material-light)
+            (dark . material))) ;; Themes can be the list: (dark . (tsdh-dark wombat))
+    ;; Optionall, load themes without asking for confirmation.
+    (setq heaven-and-hell-load-theme-no-confirm t)
+    :hook (after-init . heaven-and-hell-init-hook)
     :config
-    (load-theme 'zenburn t))
+      (define-key evil-motion-state-map (kbd "SPC t t") 'heaven-and-hell-toggle-theme))
 #+end_src
 
 Use ~feebleline~ as a minimal mode line replacement
@@ -279,6 +299,8 @@ Company is a code completion front-end. It handles all the logic regarding code 
     (setq company-idle-delay 0))
 #+end_src
 
+*** TODO Company fuzzy matching
+Add fuzzy mathcing to company (for that full on JetBrains experience man)
 ** Flycheck
 Flycheck is a package for Emacs that brings on-the-fly syntax checking.
 #+begin_src emacs-lisp
@@ -333,8 +355,10 @@ Omnisharp is a C# autocomplete backend package for emacs. It integrates with =co
 #+begin_src emacs-lisp
   (use-package omnisharp
     :config
-    (eval-after-load 'company '(add-to-list 'company-backends 'company-omnisharp))
-    (add-hook 'csharp-mode-hook #'company-mode))
+    (add-hook 'csharp-mode-hook 'omnisharp-mode)
+    (eval-after-load 'company '(add-to-list 'company-backends 'company-omnisharp)))
+    ;;(add-hook 'csharp-mode-hook #'flycheck-mode)
+    ;;(add-hook 'csharp-mode-hook #'company-mode))
 #+end_src
 ** Projectile
 =projectile= teaches emacs the concept of a project. Some useful features are jumping to a file/buffer and switching from source file to corresponding header file.
