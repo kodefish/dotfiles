@@ -202,17 +202,17 @@ Add emoji support because you never know.
 (use-package emojify)
 #+end_src
 
-* TODO Coding
+* TODO Programming
 ** Programming specific interface improvements
 *** Neo-tree
 An Emcacs tree plugin like NerdTree for Vim
 #+begin_src emacs-lisp
-  (use-package neotree
+(use-package neotree
     :config
     (global-set-key (kbd "M-t") 'neotree-toggle)
     ;; When running 'projectile-switch-project-action, neotree will change root automatically
     (setq projectile-switch-project-action 'neotree-projectile-action)
-     ;; Neotree highligts current file on open
+    ;; Neotree highligts current file on open
     (setq neo-smart-open t)
     (add-hook 'neotree-mode-hook
         (lambda ()
@@ -224,7 +224,15 @@ An Emcacs tree plugin like NerdTree for Vim
             (define-key evil-normal-state-local-map (kbd "n") 'neotree-next-line)
             (define-key evil-normal-state-local-map (kbd "p") 'neotree-previous-line)
             (define-key evil-normal-state-local-map (kbd "A") 'neotree-stretch-toggle)
-            (define-key evil-normal-state-local-map (kbd "H") 'neotree-hidden-file-toggle))))
+            (define-key evil-normal-state-local-map (kbd "H") 'neotree-hidden-file-toggle)))
+    (add-hook 'neo-after-create-hook
+    (lambda (_)
+        (with-current-buffer (get-buffer neo-buffer-name)
+        (setq truncate-lines t)
+        (setq word-wrap nil)
+        (make-local-variable 'auto-hscroll-mode)
+        (setq auto-hscroll-mode nil))))
+)
 #+end_src
 *** Relative line numbers
 Activate relative line numbers. Very useful when using vim keybindings. Toggle using =M-l=.
@@ -266,12 +274,6 @@ Expand parantheses automatically, kinda like smartparens
 (add-hook 'prog-mode-hook 'electric-pair-mode)
 
 #+end_src
-** Fuzzy search
-*** fzf
-=fzf= is a quick fuzzy finder
-#+begin_src emacs-lisp
-(use-package fzf)
-#+end_src
 ** Environment management
 By default, emacs doesn't read from the same environment variables as the terminal. This package fixes that
 #+begin_src emacs-lisp
@@ -292,15 +294,19 @@ Because you need jump to source. Individual language packages often support IDE 
 Company is a code completion front-end. It handles all the logic regarding code completion except actually creating the completions. It requries a completion backend (such as RTags or Irony).
 #+begin_src emacs-lisp
   (use-package company
+    :init
+    (setq company-requrie-match nil)            ; Don't requrie match, so you can still move the cursor as expected
+    (setq company-tooltip-align-annotations t)  ; Align annotation to the right side.
+    (setq company-eclim-auto-save nil)          ; Stop eclim auto save
+    (setq company-dabbrev-downcase nil)         ; No downcase when completion
     :config
     (add-hook 'after-init-hook #'global-company-mode)
     (global-set-key (kbd "C-SPC") 'company-complete-common-or-cycle)
-    (message "Company config")
+    (global-set-key (kbd "M-j") 'company-select-next-or-abort)
+    (global-set-key (kbd "M-k") 'company-select-previous-or-abort)
     (setq company-idle-delay 0))
 #+end_src
 
-*** TODO Company fuzzy matching
-Add fuzzy mathcing to company (for that full on JetBrains experience man)
 ** Flycheck
 Flycheck is a package for Emacs that brings on-the-fly syntax checking.
 #+begin_src emacs-lisp
@@ -360,6 +366,17 @@ Omnisharp is a C# autocomplete backend package for emacs. It integrates with =co
     ;;(add-hook 'csharp-mode-hook #'flycheck-mode)
     ;;(add-hook 'csharp-mode-hook #'company-mode))
 #+end_src
+** Company fuzzy matching
+Add fuzzy mathcing to company (for that full on JetBrains experience man)
+#+begin_src emacs-lisp
+(use-package company-fuzzy
+  :ensure t
+  :config
+  (global-company-fuzzy-mode 1)
+  (setq company-fuzzy-sorting-backend 'flx)
+  ;; (setq company-fuzzy-show-annotation t)
+  )
+#+end_src>
 ** Projectile
 =projectile= teaches emacs the concept of a project. Some useful features are jumping to a file/buffer and switching from source file to corresponding header file.
 #+begin_src emacs-lisp
@@ -370,6 +387,17 @@ Omnisharp is a C# autocomplete backend package for emacs. It integrates with =co
     (setq projectile-project-search-path '("~/src/"))
     (projectile-mode +1))
 #+end_src
+** Magit
+=magit= is a git-porcelaine inside of emacs. Basically wraps around git commands, making git a pleasure to use inside of emacs.
+#+begin_src emacs-lisp
+  (use-package magit
+    :ensure t
+    :config
+    (define-key evil-motion-state-map (kbd "SPC g") 'magit-status)   
+  )
+
+#+end_src
+
 * Org
 Setup some ~org-mode~ specifics
 
