@@ -138,6 +138,9 @@ Evil mode emulate vim in emacs. Best of both worlds.
     ;; Make sure no mode can override evil keybindings
     (setq evil-overriding-maps nil)
     (setq evil-intercept-maps nil)
+    ;; Visual line navigation
+    (define-key evil-motion-state-map "j" 'evil-next-visual-line)   
+    (define-key evil-motion-state-map "k" 'evil-previous-visual-line)   
     ;; Window navigation
     (define-key evil-motion-state-map " " nil)   
     (define-key evil-motion-state-map (kbd "SPC w h") 'evil-window-left)
