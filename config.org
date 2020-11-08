@@ -144,7 +144,7 @@ Evil mode emulate vim in emacs. Best of both worlds.
     (define-key evil-motion-state-map (kbd "SPC w j") 'evil-window-down)
     (define-key evil-motion-state-map (kbd "SPC w k") 'evil-window-up)
     (define-key evil-motion-state-map (kbd "SPC w l") 'evil-window-right)
-    (define-key evil-motion-state-map (kbd "SPC w d") 'evil-window-delete)
+    (define-key evil-motion-state-map (kbd "SPC w c") 'evil-window-delete)
     (define-key evil-motion-state-map (kbd "SPC w s") 'evil-window-split)
     (define-key evil-motion-state-map (kbd "SPC w v") 'evil-window-vsplit)
     ;; Change window size
@@ -388,14 +388,17 @@ Add fuzzy mathcing to company (for that full on JetBrains experience man)
     (projectile-mode +1))
 #+end_src
 ** Magit
-=magit= is a git-porcelaine inside of emacs. Basically wraps around git commands, making git a pleasure to use inside of emacs.
+=magit= is a git-porcelain inside of emacs. Basically wraps around git commands, making git a pleasure to use inside of emacs.
 #+begin_src emacs-lisp
   (use-package magit
     :ensure t
     :config
-    (define-key evil-motion-state-map (kbd "SPC g") 'magit-status)   
-  )
+    (define-key evil-motion-state-local-map (kbd "SPC g") 'magit-status))
+#+end_src
 
+=evil-magit= is a wrapper around =magit= to have neat =evil= keybindings. Fun, I know, but this gives some semblance of vim navigation in magit which is very useful.
+#+begin_src emacs-lisp
+(use-package evil-magit :ensure t)
 #+end_src
 
 * Org
