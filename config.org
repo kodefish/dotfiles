@@ -1,7 +1,6 @@
-    * Emacs config
-    This is my emacs config. It relies on org-babel to be cleary documented. Yay! 
-
-    This file is heavily inspired from [[https://github.com/jamiecollinson/dotfiles/blob/master/config.org][Jamie Collinson]]. 
+* Emacs config
+This is my emacs config. It relies on org-babel to be cleary documented. Yay! 
+This file is heavily inspired from [[https://github.com/jamiecollinson/dotfiles/blob/master/config.org][Jamie Collinson]]. 
 
 * Setup
 ** Configure package sources
