@@ -434,7 +434,20 @@ Settings for source blocks in org files
 (setq org-src-tab-acts-natively t)
 (setq org-src-window-setup 'current-window)
 #+end_src
-
+** Evil keybindings
+Add =evil= keybindings to =org-mode= thanks to =evil-org=.
+#+begin_src emacs-lisp
+  (use-package evil-org
+    :ensure t
+    :after org
+    :config
+    (add-hook 'org-mode-hook 'evil-org-mode)
+    (add-hook 'evil-org-mode-hook
+      (lambda ()
+        (evil-org-set-key-theme)))
+    (require 'evil-org-agenda)
+    (evil-org-agenda-set-keys))
+#+end_src
 ** Visual settings
 Setup inspired from [[https://zzamboni.org/post/beautifying-org-mode-in-emacs/][Diego Zamboni's Visual Org mode guide]].
 
