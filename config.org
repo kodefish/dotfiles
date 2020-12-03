@@ -393,6 +393,7 @@ Add fuzzy mathcing to company (for that full on JetBrains experience man)
     :config
     (define-key evil-motion-state-map (kbd "SPC p") 'projectile-command-map)   
     (setq projectile-project-search-path '("~/src/"))
+    (setq-default projectile-switch-project-action #'magit-status)
     (projectile-mode +1))
 #+end_src
 ** Magit
@@ -401,7 +402,12 @@ Add fuzzy mathcing to company (for that full on JetBrains experience man)
   (use-package magit
     :ensure t
     :config
-    (define-key evil-motion-state-map (kbd "SPC g g") 'magit-status))
+    ;; shortcut to open magit-status
+    (define-key evil-motion-state-map (kbd "SPC g g") 'magit-status)
+    ;; always use the current buffer for magit, don't open new ones
+    (setq magit-display-buffer-function
+      (lambda (buffer)
+        (display-buffer buffer '(display-buffer-same-window)))))
 #+end_src
 
 =evil-magit= is a wrapper around =magit= to have neat =evil= keybindings. Fun, I know, but this gives some semblance of vim navigation in magit which is very useful.
