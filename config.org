@@ -210,6 +210,15 @@ Add emoji support because you never know.
 (use-package emojify)
 #+end_src
 
+** Text completion
+=helm= provides incremental autocomplete and narrowing selections.
+#+begin_src emacs-lisp
+  (use-package helm
+    :init
+    (setq helm-split-window-default 'other)
+    (helm-mode 1))
+#+end_src
+
 * TODO Programming
 ** Programming specific interface improvements
 *** Neo-tree
@@ -440,6 +449,11 @@ Settings for source blocks in org files
 (setq org-src-tab-acts-natively t)
 (setq org-src-window-setup 'current-window)
 #+end_src
+
+Use user labels instead of auto-generated ones when specified
+#+begin_src emacs-lisp
+(setq org-latex-prefer-user-labels t)
+#+end_src
 ** Evil keybindings
 Add =evil= keybindings to =org-mode= thanks to =evil-org=.
 #+begin_src emacs-lisp
@@ -472,10 +486,48 @@ Setup font-lock substitution for list markers by replacing them with a center do
 Replace all the headline markers with Unicode bullets using =org-bullets=.
 #+begin_src emacs-lisp
   (use-package org-bullets
-    :config
-    (add-hook 'org-mode-hook (lambda () (org-bullets-mode 1))))
+    :custom
+    (org-hide-leading-stars t)
+    :hook org)
+#+end_src
+** LaTeX Export settings
+Make sure latex exporting is enabled, and disable all the headers that come with the default settings. This way, all the latex headers have to be defined in the org-mode file.
+#+begin_src emacs-lisp
+  (require 'ox-latex)
+  (unless (boundp 'org-latex-classes)
+    (setq org-latex-classes nil))
+  (add-to-list 'org-latex-classes
+    '("mt_thesis" 
+      "\\documentclass[11pt]{report}"
+      ;; ("\\part{%s}" . "\\part*{%s}")
+      ("\\chapter{%s}" . "\\chapter*{%s}")
+      ("\\section{%s}" . "\\section*{%s}")
+      ("\\subsection{%s}" . "\\subsection*{%s}")
+      ("\\subsubsection{%s}" . "\\subsubsection*{%s}")))
+#+end_src
+* Academic writing
+For academic writing, I use orgmode, then export to PDF via LaTeX.
+
+=helm-bibtex= is a package that ...
+#+begin_src emacs-lisp
+  (use-package helm-bibtex
+    :custom
+    (bibtex-completion-pdf-field "file")
+    :hook (Tex . (lambda () (define-key Tex-mode-map "\C-ch" 'helm-bibtex))))
+
 #+end_src
 
+=org-ref= manages citations in the papers.
+#+begin_src emacs-lisp
+  (use-package org-ref
+    :ensure t)
+#+end_src
+
+Setup export process from orgmode to LaTeX to PDF
+#+begin_src emacs-lisp
+  (setq org-latex-pdf-process
+    '("latexmk -pdflatex='pdflatex -interaction nonstopmode' -pdf -bibtex -f %f"))
+#+end_src
 * Extras
 ** Writing
 ~writegood-mode~ highlights bad word choices and has functions for calculating readability.
