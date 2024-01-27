@@ -1,0 +1,71 @@
+#!/bin/bash
+
+# Check if the Docker container name is provided as an argument
+if [ $# -eq 0 ]; then
+    echo "Usage: $0 <docker_image>"
+    exit 1
+fi
+
+docker_image=$1
+
+echo "Searching for python interpreters in $docker_image"
+# Find all the python interpreters in the PATH
+python_interpreters=$(docker run --rm "$docker_image" find $(echo $PATH | tr ':' ' ')-type f -executable 2>/dev/null | grep -E 'python(?:[0-9]+(\.[0-9]+)?)?$' | sort -u)
+
+# Check if any interpreters were found
+if [ -z "$python_interpreters" ]; then
+        echo "No Python interpreters found in the PATH."
+        exit 1
+fi
+
+# Prompt the user to select a Python interpreter
+echo "Found python interpreter(s):"
+PS3="Select a Python interpreter: "
+select interpreter in $python_interpreters; do
+    if [ -n "$interpreter" ]; then
+        echo "Selected interpreter: $interpreter"
+        break
+    else
+        echo "Invalid selection. Please try again"
+    fi
+done
+
+echo ""
+echo "Searching for site packages for $interpreter"
+site_package_locations=$(docker run --rm "$docker_image" python -c 'import site; print("\n".join(package for package in site.getsitepackages()))')
+
+# Check if any site package locations were found
+if [ -z "$site_package_locations" ]; then
+    echo "No site-package locations found for $interpreter."
+    exit 1
+fi
+
+# Prompt the user to select site package locations to copy
+echo 
+echo "Found site-package location(s):"
+PS3="Select site package location to copy: "
+select site_package_location in $site_package_locations; do
+    if [ -n "$site_package_location" ]; then
+        echo "Selected site-package location: $site_package_location"
+        break
+    else
+        echo "Invalid selection. Please try again"
+    fi
+done
+
+# Create a local folder to store the copied files
+local_folder="$(pwd)/.remote_sources"
+mkdir -p "$local_folder"
+
+# Copy files from selected site package locations to the local folder
+echo ""
+echo "Copying files from $site_package_location to $local_folder"
+docker_container="nvim_helper_${docker_image}"
+docker create --name "$docker_container" "$docker_image" 1>/dev/null
+docker cp "$docker_container:$site_package_location" "$local_folder"
+if [ $? -eq 0 ]; then
+    echo "Copy operation completed successfully."
+else
+    echo "Copy operation failed."
+fi
+docker rm "$docker_container" 1>/dev/null
