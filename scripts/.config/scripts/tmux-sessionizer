@@ -1,0 +1,51 @@
+#!/usr/bin/env bash
+
+# List of directories to search
+SEARCH_DIRS=(
+    ~/work
+    ~/personal
+)
+
+# Function to show a menu and return the selected directory
+select_directory() {
+    PS3="Select a directory: "
+    options=($(find "${SEARCH_DIRS[@]}" -mindepth 1 -maxdepth 1 -type d))
+    select dir in "${options[@]}"; do
+        if [[ -n $dir ]]; then
+            echo "$dir"
+            break
+        else
+            echo "Invalid selection. Please try again."
+        fi
+    done
+}
+# Check if an argument is passed
+if [[ $# -eq 1 ]]; then
+    selected=$1
+# Check if fzf is installed
+elif command -v fzf &> /dev/null; then
+    selected=$(find "${SEARCH_DIRS[@]}" -mindepth 1 -maxdepth 1 -type d | fzf)
+# Use menu-based selection as a fallback
+else
+    echo "Warning: fzf is not installed. Falling back to menu-based selection."
+    selected=$(select_directory)
+fi
+
+if [[ -z $selected ]]; then
+    exit 0
+fi
+
+selected_name=$(basename "$selected" | tr . _)
+tmux_running=$(pgrep tmux)
+
+if [[ -z $TMUX ]] && [[ -z $tmux_running ]]; then
+    tmux new-session -s $selected_name -c $selected
+    exit 0
+fi
+
+if ! tmux has-session -t=$selected_name 2> /dev/null; then
+    tmux new-session -ds $selected_name -c $selected
+fi
+
+tmux switch-client -t $selected_name
+
