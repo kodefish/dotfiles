@@ -1,0 +1,6 @@
+# Git stuff
+\.git
+\.gitignore
+
+.DS_Store   # MacOS
+lazy-lock.json  # Nvim Lazy package manager lock file
