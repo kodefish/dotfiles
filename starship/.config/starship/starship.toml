@@ -1,0 +1,24 @@
+# A minimal left prompt 
+add_newline = false
+format = """$directory$character"""
+right_format = "$all"
+
+# TODO: Catppuccin theme
+
+[python]
+disabled = false
+
+[git_branch]
+disabled = true
+
+[git_commit]
+disabled = true
+
+[git_state]
+disabled = true
+
+[git_status]
+disabled = true
+
+[cmd_duration]
+disabled = true
