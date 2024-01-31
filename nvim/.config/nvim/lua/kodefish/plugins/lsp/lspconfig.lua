@@ -78,8 +78,8 @@ return {
                         missing_parameters = false, -- disable missing parameters for lua
                     },
                     completion = {
-                        callSnippet = "Replace"
-                    }
+                        callSnippet = "Replace",
+                    },
                 },
             },
         })
