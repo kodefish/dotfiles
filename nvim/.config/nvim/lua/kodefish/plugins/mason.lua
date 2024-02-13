@@ -15,31 +15,32 @@ return {
         mason.setup({
             ui = {
                 icons = {
-                    package_installed = '✓',
-                    package_pending = '➜',
-                    package_uninstalled = '✗',
-                }
+                    package_installed = "✓",
+                    package_pending = "➜",
+                    package_uninstalled = "✗",
+                },
             },
         })
 
         -- Add default lsp servers
         mason_lspconfig.setup({
             ensure_installed = {
-                'lua_ls',
-                'pyright',
-                'gopls',
+                "lua_ls",
+                "pyright",
+                "gopls",
+                "yamlls",
             },
-            -- auto-install configured servers 
+            -- auto-install configured servers
             automatic_installation = true,
         })
 
         -- Install tools
         mason_tool_installer.setup({
             ensure_installed = {
-                'ruff',     -- python formatter
-                'stylua',   -- lua formatter
-                'delve',    -- go debugger
-            }
+                "ruff", -- python formatter
+                "stylua", -- lua formatter
+                "delve", -- go debugger
+            },
         })
     end,
 }

@@ -20,6 +20,6 @@ return {
         -- Keymaps
         vim.keymap.set("n", "zR", ufo.openAllFolds, { desc = "(R)eveal all folds" })
         vim.keymap.set("n", "zM", ufo.closeAllFolds, { desc = "(M)inimize all folds" })
-        vim.keymap.set("n", "zP", ufo.peekFoldedLinesUnderCursor, { desc = "(P)eek fold" })
+        vim.keymap.set("n", "zp", ufo.peekFoldedLinesUnderCursor, { desc = "(P)eek fold" })
     end,
 }
