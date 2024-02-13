@@ -27,3 +27,6 @@ local function toggle_wrap_mode()
 end
 
 keymap.set("n", "<leader>w", toggle_wrap_mode, { desc = "Toggle wrap" })
+
+-- Buffer management
+keymap.set("n", "<leader>bd", "<cmd>bdelete<cr>", { desc = "Buffer Delete" })
