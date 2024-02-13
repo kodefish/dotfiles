@@ -1,16 +1,29 @@
 #!/bin/bash
 
-# Check if the Docker container name is provided as an argument
-if [ $# -eq 0 ]; then
-    echo "Usage: $0 <docker_image>"
+# List Docker images using a custom format to only show repository:tag
+images=( $(docker images --format "{{.Repository}}:{{.Tag}}") )
+
+# Check if there are any images
+if [ ${#images[@]} -eq 0 ]; then
+    echo "No Docker images found on this machine."
     exit 1
 fi
 
-docker_image=$1
+# Use select to create a menu for user to choose from
+echo "Select a Docker image from the list:"
+PS3="Select a docker image: "
+select tagged_docker_image in "${images[@]}"; do
+    if [ -n "$tagged_docker_image" ]; then
+        echo "You selected the Docker image: $tagged_docker_image"
+        break # Break the select loop if a valid selection is made
+    else
+        echo "Invalid selection. Please try again."
+    fi
+done
 
-echo "Searching for python interpreters in $docker_image"
+echo "Searching for python interpreters in $tagged_docker_image"
 # Find all the python interpreters in the PATH
-python_interpreters=$(docker run --rm "$docker_image" find $(echo $PATH | tr ':' ' ')-type f -executable 2>/dev/null | grep -E 'python(?:[0-9]+(\.[0-9]+)?)?$' | sort -u)
+python_interpreters=$(docker run --rm "$tagged_docker_image" find $(echo $PATH | tr ':' ' ')-type f -executable 2>/dev/null | grep -E 'python(?:[0-9]+(\.[0-9]+)?)?$' | sort -u)
 
 # Check if any interpreters were found
 if [ -z "$python_interpreters" ]; then
@@ -32,7 +45,7 @@ done
 
 echo ""
 echo "Searching for site packages for $interpreter"
-site_package_locations=$(docker run --rm "$docker_image" python -c 'import site; print("\n".join(package for package in site.getsitepackages()))')
+site_package_locations=$(docker run --rm "$tagged_docker_image" python -c 'import site; print("\n".join(package for package in site.getsitepackages()))')
 
 # Check if any site package locations were found
 if [ -z "$site_package_locations" ]; then
@@ -53,18 +66,24 @@ select site_package_location in $site_package_locations; do
     fi
 done
 
+# Extract docker image name from <repository>/<image name>:<tag>
+docker_image_name=$(echo $tagged_docker_image | sed 's|.*/\([^/]*\):.*|\1|')
 # Create a local folder to store the copied files
-local_folder="$(pwd)/.remote_sources"
-mkdir -p "$local_folder"
+# TODO: Instead of storing it in a local folder, copy to usr cache
+# ~/.cache/remote_sources/<image name>@<image id>
+tagged_docker_image_id=$(docker images --format '{{.Repository}}:{{.Tag}} {{.ID}}' | grep $tagged_docker_image | awk '{print $2}')
+cache_folder="$XDG_CACHE_HOME/docker_remote_sources/$docker_image_name@$tagged_docker_image_id"
+mkdir -p "$cache_folder"
 
 # Copy files from selected site package locations to the local folder
 echo ""
-echo "Copying files from $site_package_location to $local_folder"
-docker_container="nvim_helper_${docker_image}"
-docker create --name "$docker_container" "$docker_image" 1>/dev/null
-docker cp "$docker_container:$site_package_location" "$local_folder"
+echo "Copying files from $site_package_location to $cache_folder"
+docker_container="nvim_helper_${docker_image_name}"
+docker create --name "$docker_container" "$tagged_docker_image" 1>/dev/null
+docker cp "$docker_container:$site_package_location" "$cache_folder"
 if [ $? -eq 0 ]; then
     echo "Copy operation completed successfully."
+    echo "Add $cache_folder to your LSP extraPaths configuration"
 else
     echo "Copy operation failed."
 fi
