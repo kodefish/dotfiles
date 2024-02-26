@@ -1,0 +1,64 @@
+#!/bin/bash
+# Clone a git repositiory into a local folder using the --bare option for a worktree-based workflow
+
+# Function to display help message
+show_help() {
+    echo "Usage: $0 <git repo> [local folder]"
+    echo
+    echo "This script initializes a git bare repository along with some additional commands to enable a worktree-based workflow"
+    echo
+    echo "Arguments:"
+    echo "  <git repo>      The Git repository to clone."
+    echo "  [local folder]  The loal folder name to clone into. Optional."
+    echo "                  If not specified, it is inferred from the git repo URL"
+    echo "                  and '-bare' is appended to the name."
+    echo
+    echo "Options:"
+    echo "  -h, --help      Show this help message and exit."
+}
+
+# Check for help option
+if [[ "$1" == "--help" ]] || [[ "$1" == "-h" ]]; then
+    show_help
+    exit 0
+fi
+
+# Check if at least one argument is provided
+if [[ $# -lt 1 ]]; then
+    echo "Error: Missing required argument <git repo>."
+    show_help
+    exit 1
+fi
+
+GIT_REPO=$1
+
+# If local folder is not specified, infer it from the git repo
+if [ -z "$2" ]; then
+    LOCAL_FOLDER=$(basename -s .git "$GIT_REPO")-bare
+else
+    LOCAL_FOLDER=$2
+fi
+
+# Make the directory
+mkdir -p "$LOCAL_FOLDER"
+
+# Clone as a bare repository
+git clone --bare "$GIT_REPO" "${LOCAL_FOLDER}/.bare"
+
+# Setup .git file to point to bare repository
+echo "gitdir: ./.bare" > "${LOCAL_FOLDER}/.git"
+
+echo "Repository initialized successfully."
+
+# Add some helpful information on managing worktrees
+echo
+echo "To create a worktree for an existing branch (including remote branches):"
+echo "  git worktree add <path-to-new-worktree> <branch-name>"
+echo "  Example: git worktree add feature-branch feature-branch"
+echo
+echo "To create a workstree for a new branch off an existing one:"
+echo "  git worktree add -b <new-branch-name> <path-to-new-worktree> <start-point>"
+echo "  Example: git worktree -b new-feature new-feature master"
+echo
+echo "Note: <start-point> should be a commit-ish object (e.g. a branch name, commit SHA or tag)."
+
