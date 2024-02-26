@@ -7,6 +7,14 @@ To install:
 To remove:
 ```stow --target=$HOME --delete */```
 
+To adopt a new file `<new file>` into an existing stow `<package>`
+```
+touch <package>/<path-to-new-file>/<new-file>
+stow --adopt --target=$HOME -nv <package>
+```
+
+First we need to notify `stow` of the new file by creating an empty plain-text file in the package, that maps to the file we're adopting. Othwerwise, stow will not identify it as a package to adopt. The second command will identify files to adopt and move / link them to the dotfiles repository. This is very useful when moving files into the version control system. 
+
 # System Dependencies
 1. `ripgrep`: `brew install ripgrep`. Used by `telescope.nvim` to recursively search for (grep) text in files accross directories
 2. `node` / `npm`: `brew install node`. Required by `mason.nvim` when installing `pyright` (python language server)
