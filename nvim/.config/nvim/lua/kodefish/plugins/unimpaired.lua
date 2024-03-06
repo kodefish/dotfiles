@@ -6,12 +6,12 @@ return {
         unimpaired.setup({
             keymaps = {
                 bnext = {
-                    mapping = '<leader>n',
+                    mapping = '<leader>bn',
                     description = 'Go to [count] next buffer',
                     dot_repeat = true,
                 },
                 bprevious = {
-                    mapping = '<leader>p',
+                    mapping = '<leader>bp',
                     description = 'Go to [count] previous buffer',
                     dot_repeat = false,
                 },
