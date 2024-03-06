@@ -28,6 +28,7 @@ export PATH=$PATH:/usr/local/go/bin:$GOPATH/bin
 
 # Aliases
 alias lg=lazygit            # Lazyvim alias to be even lazier
+alias ld=lazydocker         # Lazydocker alias to be even lazier
 alias t=tmux-sessionizer    # Simple tmux session manager
 
 # Load work related config, if it exists
