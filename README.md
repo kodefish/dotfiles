@@ -25,9 +25,22 @@ First we need to notify `stow` of the new file by creating an empty plain-text f
 - To better understand the font, read the [doc](https://github.com/andreberg/Meslo-Font?tab=readme-ov-file). The gist of it is that LG stands for line gap (vertical), and the font has 3 sizes: S, M, and L. The font also comes with dotted zero (DZ) or not. Finally, you can choose between Regular, Mono (monospaced, for terminals and code editors) and Propo (proportional)
 - My preference is for a medium line gap, dotted zero and monospaced, hence I only install the MesloLGMDZ Nerd Font Mono font family.
 
+# Python LSP server
+Manually install 3rd party plugins:
+```
+$ cd $XDG_DATA_HOME/nvim/mason/packages/python-lsp-server
+$ source venv/bin/activate
+$ pip install python-lsp-ruff python-lsp-mypy python-lsp-rope
+<alternative>
+$ pip install 'python-lsp[all]'
+$ deactivate
+```
+A fun TODO would be to enable Mason to auto-install these packages automatically
+
 # TODO
 1. 0 timeout on pressing escape
 4. Setup debugging (using docker)
 3. Replicate LazyVim keybindings (and groups for which-key)
 3. Setup proper dotfiles repo
     1. iTerm2, enable mouse reporting [see here](https://jasonmurray.org/posts/2020/tmuxdebian/), make sure it sticks
+

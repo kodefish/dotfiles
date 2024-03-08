@@ -26,6 +26,7 @@ return {
         mason_lspconfig.setup({
             ensure_installed = {
                 "lua_ls",
+                "pylsp",
                 "pyright",
                 "gopls",
                 "yamlls",
@@ -37,9 +38,9 @@ return {
         -- Install tools
         mason_tool_installer.setup({
             ensure_installed = {
-                "ruff", -- python formatter
                 "stylua", -- lua formatter
                 "delve", -- go debugger
+                "debugpy", -- python debugger
             },
         })
     end,
