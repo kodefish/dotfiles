@@ -15,7 +15,10 @@ return {
                     description = 'Go to [count] previous buffer',
                     dot_repeat = false,
                 },
-                bfirst = '<leader>N',
+                bfirst = {
+                    mapping = '<leader>bN',
+                    description = 'Go to first buffer'
+                },
                 blast = false,
             }
 

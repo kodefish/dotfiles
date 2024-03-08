@@ -29,4 +29,4 @@ end
 keymap.set("n", "<leader>w", toggle_wrap_mode, { desc = "Toggle wrap" })
 
 -- Buffer management
-keymap.set("n", "<leader>bd", "<cmd>bdelete<cr>", { desc = "Buffer Delete" })
+keymap.set("n", "<leader>bd", "<cmd>bdelete<cr>", { desc = "Delete Buffer" })
