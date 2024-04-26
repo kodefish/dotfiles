@@ -1,0 +1,19 @@
+#!/bin/bash
+
+# TODO: Generate a better CLI interface (add a -h, and a description)
+
+# Validate input
+if [ -z "$1" ]; then
+    echo "Error: A file name must be set, e.g. \"New Note\"."
+    exit 1
+fi
+
+# Format input into file name
+file_name=$(echo "$1" | tr ' ' '-')
+formatted_file_name=$(date "+%Y-%m-%d")_${file_name}.md
+
+# Create new note in Obsidian Vault
+OBSIDIAN_VAULT="$HOME/Library/Mobile Documents/iCloud~md~obsidian/Documents/Notes"
+cd "$OBSIDIAN_VAULT" || exit
+touch "inbox/${formatted_file_name}"
+nvim "inbox/${formatted_file_name}"

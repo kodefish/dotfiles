@@ -30,3 +30,7 @@ alias t=tmux-sessionizer    # Simple tmux session manager
 
 # Load work related config, if it exists
 [ -f ${XDG_CONFIG_HOME:-$HOME/.config}/zsh/work.zsh ] && source ${XDG_CONFIG_HOME:-$HOME/.config}/zsh/work.zsh
+
+# Obsidian
+export OBSIDIAN_VAULT="$HOME/Library/Mobile Documents/iCloud~md~obsidian/Documents/Notes"
+alias oo='cd "$OBSIDIAN_VAULT"'
