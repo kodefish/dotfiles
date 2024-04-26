@@ -1,9 +1,11 @@
 #!/usr/bin/env bash
 
 # List of directories to search
+# TODO, auto-detect if a repo is bare, in which case list worktrees
 SEARCH_DIRS=(
     ~/work
     ~/personal
+    "$HOME/Library/Mobile Documents/iCloud~md~obsidian/Documents"
 )
 
 # Function to show a menu and return the selected directory

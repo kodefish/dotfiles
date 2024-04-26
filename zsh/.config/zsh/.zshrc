@@ -19,9 +19,6 @@ plug "wintermi/zsh-starship"
 bindkey '^[[A' history-substring-search-up
 bindkey '^[[B' history-substring-search-down
 
-# Additional helper scripts
-export PATH=$PATH:${XDG_CONFIG_HOME:-$HOME/.config}/scripts
-
 # Go
 export GOPATH=$HOME/go
 export PATH=$PATH:/usr/local/go/bin:$GOPATH/bin
