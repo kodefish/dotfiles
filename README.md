@@ -1,3 +1,4 @@
+# TODO: Automate installation with ansible
 # Stow
 Stow is used to manage the dotfiles
 
@@ -37,6 +38,9 @@ $ deactivate
 ```
 A fun TODO would be to enable Mason to auto-install these packages automatically
 
+# Color schemes
+- k9s: https://github.com/catppuccin/k9s
+
 # TODO
 1. 0 timeout on pressing escape
 4. Setup debugging (using docker)
@@ -44,3 +48,10 @@ A fun TODO would be to enable Mason to auto-install these packages automatically
 3. Setup proper dotfiles repo
     1. iTerm2, enable mouse reporting [see here](https://jasonmurray.org/posts/2020/tmuxdebian/), make sure it sticks
 
+# Vim Plugins to install
+1. noice.nvim
+2. smart-splits.nvim
+3. SmoothCursor.nvim
+4. neoscroll.nvim
+5. nvim-notify
+6. replace illuminate with vim highlighter?
