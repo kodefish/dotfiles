@@ -67,7 +67,8 @@ select site_package_location in $site_package_locations; do
 done
 
 # Extract docker image name from <repository>/<image name>:<tag>
-docker_image_name=$(echo $tagged_docker_image | sed 's|.*/\([^/]*\):.*|\1|')
+# Good luck understanding that regex...
+docker_image_name=$(echo $tagged_docker_image | sed -E 's|.*/([^:/]+):.*|\1|; s|([^:/]+):.*|\1|')
 # Create a local folder to store the copied files
 # TODO: Instead of storing it in a local folder, copy to usr cache
 # ~/.cache/remote_sources/<image name>@<image id>
@@ -83,7 +84,7 @@ docker create --name "$docker_container" "$tagged_docker_image" 1>/dev/null
 docker cp "$docker_container:$site_package_location" "$cache_folder"
 if [ $? -eq 0 ]; then
     echo "Copy operation completed successfully."
-    echo "Add $cache_folder to your LSP extraPaths configuration"
+    echo "Add $cache_folder/site-packages to your LSP extraPaths configuration"
 else
     echo "Copy operation failed."
 fi

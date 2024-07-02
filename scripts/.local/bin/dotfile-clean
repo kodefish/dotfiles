@@ -1,0 +1,68 @@
+#!/bin/bash
+
+# Script to identify and selectively remove broken symlinks from the user's home directory
+
+# Get the directory to scan from the command line, or default to the home directory
+DIRECTORY=${1:-$HOME}
+echo "Scanning for broken symlinks in the directory: $DIRECTORY"
+
+
+# Initialize an array to hold the paths of broken symlinks
+declare -a broken_symlinks
+
+# Find all symlinks and check if they are broken
+while IFS= read -r symlink; do
+    if [ ! -e "$symlink" ]; then
+        broken_symlinks+=("$symlink")
+        echo "Found broken symlink: $symlink"
+    fi
+done < <(find $DIRECTORY -type l)
+
+# Check if any broken symlinks were found
+if [ ${#broken_symlinks[@]} -eq 0 ]; then
+    echo "No broken symlinks found."
+    exit 0
+fi
+
+# User options for handling broken symlinks
+echo "Total broken symlinks found: ${#broken_symlinks[@]}"
+echo "Options:"
+echo "1) Remove all broken symlinks"
+echo "2) Remove specific broken symlinks"
+echo "3) Do not remove any symlinks"
+read -p "Select an option [1-3]: " option
+
+case $option in
+    1)
+        for symlink in "${broken_symlinks[@]}"; do
+            rm "$symlink"
+            echo "Removed $symlink"
+        done
+        ;;
+    2)
+        echo "List of broken symlinks with indices:"
+        for i in "${!broken_symlinks[@]}"; do
+            echo "$((i+1))) ${broken_symlinks[i]}"
+        done
+        echo "Enter the numbers of the symlinks you wish to remove, separated by spaces:"
+        IFS=' ' read -ra indices
+        for index in "${indices[@]}"; do
+            index=$((index-1)) # Adjust for zero-based index of arrays
+            if [[ $index -ge 0 && $index -lt ${#broken_symlinks[@]} ]]; then
+                rm "${broken_symlinks[$index]}"
+                echo "Removed ${broken_symlinks[$index]}"
+            else
+                echo "Invalid index: $((index+1))"
+            fi
+        done
+        ;;
+    3)
+        echo "No symlinks were removed."
+        ;;
+    *)
+        echo "Invalid option selected."
+        ;;
+esac
+
+echo "Operation complete."
+
