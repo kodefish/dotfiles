@@ -27,9 +27,6 @@ return {
             ensure_installed = {
                 "lua_ls",
                 "pylsp",
-                "pyright",
-                "gopls",
-                "yamlls",
             },
             -- auto-install configured servers
             automatic_installation = true,
@@ -39,8 +36,6 @@ return {
         mason_tool_installer.setup({
             ensure_installed = {
                 "stylua", -- lua formatter
-                "delve", -- go debugger
-                "debugpy", -- python debugger
             },
         })
     end,

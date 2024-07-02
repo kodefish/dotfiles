@@ -4,3 +4,7 @@
 
 .DS_Store   # MacOS
 lazy-lock.json  # Nvim Lazy package manager lock file
+
+# Devcontainer
+.devcontainer.json
+setup.sh

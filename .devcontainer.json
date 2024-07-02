@@ -1,0 +1,8 @@
+{
+    "image": "mcr.microsoft.com/devcontainers/base:debian",
+    "features": {
+        "ghcr.io/devcontainers/features/nix:1": {},
+        "ghcr.io/nils-geistmann/devcontainers-features/zsh:0": {}
+    },
+    "postCreateCommand": "/bin/bash install.sh"
+}
