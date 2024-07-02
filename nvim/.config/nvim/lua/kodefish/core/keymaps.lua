@@ -25,8 +25,15 @@ local function toggle_wrap_mode()
 
 	print("Toggled wrap", window_options.wrap)
 end
-
 keymap.set("n", "<leader>w", toggle_wrap_mode, { desc = "Toggle wrap" })
 
 -- Buffer management
 keymap.set("n", "<leader>bd", "<cmd>bdelete<cr>", { desc = "Delete Buffer" })
+
+-- Split management (increase / decrease)
+-- NOTE: On MacOS, in iTerm2 make sure to bind option to Esc+
+-- https://www.reddit.com/r/vim/comments/u1kppk/comment/i4ecygu/
+keymap.set("n", "<M-h>", "<C-w>5>", { desc = "Increase split size to the left" })
+keymap.set("n", "<M-l>", "<C-w>5<")
+keymap.set("n", "<M-j>", "<C-w>+")
+keymap.set("n", "<M-k>", "<C-w>-")
