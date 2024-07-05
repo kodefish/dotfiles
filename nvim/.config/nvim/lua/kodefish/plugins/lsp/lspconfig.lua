@@ -33,10 +33,7 @@ return {
 		opts.desc = "Go to next diagnostic"
 		vim.keymap.set("n", "]d", vim.diagnostic.goto_next, opts)
 
-		local on_attach = function(_, bufnr)
-			-- Enable completions triggered by <C-x><C-o>
-			vim.api.nvim_buf_set_option(bufnr, "omnifunc", "v:lua.vim.lsp.omnifunc")
-
+		local on_attach = function(client, bufnr)
 			-- Set buffer specific keymaps
 			local bufopts = { noremap = true, silent = false, buffer = bufnr }
 
@@ -44,7 +41,7 @@ return {
 			vim.keymap.set("n", "gd", vim.lsp.buf.definition, bufopts)
 
 			bufopts.desc = "Get references"
-            vim.keymap.set("n", "gr", vim.lsp.buf.references, bufopts)
+			vim.keymap.set("n", "gr", vim.lsp.buf.references, bufopts)
 
 			bufopts.desc = "Show documentation for object under the cursor"
 			vim.keymap.set("n", "K", vim.lsp.buf.hover, bufopts)
@@ -72,6 +69,11 @@ return {
 
 			bufopts.desc = "Restart LSP"
 			vim.keymap.set("n", "<leader>lr", "<cmd>LspRestart<cr>", opts)
+
+			if client.name == "ruff_lsp" then
+				-- Disable hover in favor of Pyright
+				client.server_capabilities.hoverProvider = false
+			end
 		end
 
 		local capabilities = cmp_nvim_lsp.default_capabilities()
@@ -92,48 +94,69 @@ return {
 			},
 		})
 
-		lspconfig.pylsp.setup({
+		lspconfig.basedpyright.setup({
 			capabilities = capabilities,
 			on_attach = on_attach,
 			settings = {
-				pylsp = {
-					plugins = {
-						-- Disable most linting and formatting, use ruff instead
-						pyflakes = { enabled = false },
-						mccabe = { enabled = false },
-						pycodestyle = { enabled = false },
-						autopep8 = { enabled = false },
-						yapf = { enabled = false },
-						-- ruff configuration
-						ruff = {
-							enabled = true,
-							formatEnabled = true,
-							extendSelect = { "I", "F", "E"}, -- Always apply isort and pyflakes linting
-							format = { "I" }, -- Apply import rules
-						},
-						-- type checker
-						pylsp_mypy = {
-							enabled = true,
-							dmypy = false,
-							live_mode = false,
-						},
-						-- completion settings
-						jedi_completion = {
-							enabled = true,
-							fuzzy = true,
-						},
-						rope_autoimport = {
-							-- NOTE: Rope autoimport works by checking for diagnostic F821. Make sure you have a linter
-							-- running that returns that diagnostic if you want auto-import. This is the reason, I have
-							-- configured ruff with extendSelect to always include F
-							enabled = true,
-							completions = { enabled = true },
-							code_actions = { enabled = true },
-						},
+				basedpyright = {
+					analysis = {
+						autoSearchPaths = true,
+						diagnosticMode = "openFilesOnly",
+						typeCheckingMode = "standard",
+						useLibraryCodeForTypes = true,
 					},
 				},
 			},
 		})
+
+		lspconfig.ruff_lsp.setup({
+			capabilities = capabilities,
+			on_attach = on_attach,
+			settings = {},
+		})
+
+		-- lspconfig.pylsp.setup({
+		-- 	capabilities = capabilities,
+		-- 	on_attach = on_attach,
+		-- 	settings = {
+		-- 		pylsp = {
+		-- 			plugins = {
+		-- 				-- Disable most linting and formatting, use ruff instead
+		-- 				pyflakes = { enabled = false },
+		-- 				mccabe = { enabled = false },
+		-- 				pycodestyle = { enabled = false },
+		-- 				autopep8 = { enabled = false },
+		-- 				yapf = { enabled = false },
+		-- 				-- ruff configuration
+		-- 				ruff = {
+		-- 					enabled = true,
+		-- 					formatEnabled = true,
+		-- 					extendSelect = { "I", "F", "E" }, -- Always apply isort and pyflakes linting
+		-- 					format = { "I" }, -- Apply import rules
+		-- 				},
+		-- 				-- type checker
+		-- 				pylsp_mypy = {
+		-- 					enabled = true,
+		-- 					dmypy = false,
+		-- 					live_mode = false,
+		-- 				},
+		-- 				-- completion settings
+		-- 				jedi_completion = {
+		-- 					enabled = true,
+		-- 					fuzzy = true,
+		-- 				},
+		-- 				rope_autoimport = {
+		-- 					-- NOTE: Rope autoimport works by checking for diagnostic F821. Make sure you have a linter
+		-- 					-- running that returns that diagnostic if you want auto-import. This is the reason, I have
+		-- 					-- configured ruff with extendSelect to always include F
+		-- 					enabled = true,
+		-- 					completions = { enabled = true },
+		-- 					code_actions = { enabled = true },
+		-- 				},
+		-- 			},
+		-- 		},
+		-- 	},
+		-- })
 
 		lspconfig.gopls.setup({
 			capabilities = capabilities,

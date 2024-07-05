@@ -31,9 +31,7 @@ Manually install 3rd party plugins:
 ```
 $ cd $XDG_DATA_HOME/nvim/mason/packages/python-lsp-server
 $ source venv/bin/activate
-$ pip install python-lsp-ruff python-lsp-mypy python-lsp-rope
-<alternative>
-$ pip install 'python-lsp[all]'
+$ pip install pylsp-mypy pylsp-rope python-lsp-ruff
 $ deactivate
 ```
 A fun TODO would be to enable Mason to auto-install these packages automatically
