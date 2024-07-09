@@ -9,6 +9,7 @@
         lazygit
         lazydocker
         bat
+        poetry
       ];
     };
   };
