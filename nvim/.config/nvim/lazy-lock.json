@@ -43,6 +43,5 @@
   "trouble.nvim": { "branch": "main", "commit": "42dcb58e95723f833135d5cf406c38bd54304389" },
   "unimpaired.nvim": { "branch": "main", "commit": "8e504ba95dd10a687f4e4dacd5e19db221b88534" },
   "vim-illuminate": { "branch": "master", "commit": "5eeb7951fc630682c322e88a9bbdae5c224ff0aa" },
-  "vim-tmux-navigator": { "branch": "master", "commit": "5b3c701686fb4e6629c100ed32e827edf8dad01e" },
   "which-key.nvim": { "branch": "main", "commit": "0099511294f16b81c696004fa6a403b0ae61f7a0" }
 }
