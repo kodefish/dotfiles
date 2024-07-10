@@ -30,6 +30,12 @@ keymap.set("n", "<leader>w", toggle_wrap_mode, { desc = "Toggle wrap" })
 -- Buffer management
 keymap.set("n", "<leader>bd", "<cmd>bdelete<cr>", { desc = "Delete Buffer" })
 
+-- Split navigation defaults (may be overriden by vim-tmux-navigation)
+keymap.set("n", "<C-h>", "<C-w>h", { desc = "Navigate split left" })
+keymap.set("n", "<C-j>", "<C-w>j", { desc = "Navigate split down" })
+keymap.set("n", "<C-k>", "<C-w>k", { desc = "Navigate split up" })
+keymap.set("n", "<C-l>", "<C-w>l", { desc = "Navigate split right" })
+
 -- Split management (increase / decrease)
 -- NOTE: On MacOS, in iTerm2 make sure to bind option to Esc+
 -- https://www.reddit.com/r/vim/comments/u1kppk/comment/i4ecygu/
