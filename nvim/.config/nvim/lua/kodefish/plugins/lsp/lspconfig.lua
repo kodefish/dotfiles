@@ -115,49 +115,6 @@ return {
 			settings = {},
 		})
 
-		-- lspconfig.pylsp.setup({
-		-- 	capabilities = capabilities,
-		-- 	on_attach = on_attach,
-		-- 	settings = {
-		-- 		pylsp = {
-		-- 			plugins = {
-		-- 				-- Disable most linting and formatting, use ruff instead
-		-- 				pyflakes = { enabled = false },
-		-- 				mccabe = { enabled = false },
-		-- 				pycodestyle = { enabled = false },
-		-- 				autopep8 = { enabled = false },
-		-- 				yapf = { enabled = false },
-		-- 				-- ruff configuration
-		-- 				ruff = {
-		-- 					enabled = true,
-		-- 					formatEnabled = true,
-		-- 					extendSelect = { "I", "F", "E" }, -- Always apply isort and pyflakes linting
-		-- 					format = { "I" }, -- Apply import rules
-		-- 				},
-		-- 				-- type checker
-		-- 				pylsp_mypy = {
-		-- 					enabled = true,
-		-- 					dmypy = false,
-		-- 					live_mode = false,
-		-- 				},
-		-- 				-- completion settings
-		-- 				jedi_completion = {
-		-- 					enabled = true,
-		-- 					fuzzy = true,
-		-- 				},
-		-- 				rope_autoimport = {
-		-- 					-- NOTE: Rope autoimport works by checking for diagnostic F821. Make sure you have a linter
-		-- 					-- running that returns that diagnostic if you want auto-import. This is the reason, I have
-		-- 					-- configured ruff with extendSelect to always include F
-		-- 					enabled = true,
-		-- 					completions = { enabled = true },
-		-- 					code_actions = { enabled = true },
-		-- 				},
-		-- 			},
-		-- 		},
-		-- 	},
-		-- })
-
 		lspconfig.gopls.setup({
 			capabilities = capabilities,
 			on_attach = on_attach,
@@ -168,6 +125,7 @@ return {
 			dynamicRegistration = false,
 			lineFoldingOnly = true,
 		}
+
 		lspconfig.yamlls.setup({
 			capabilities = yamlls_capabilities,
 			on_attach = on_attach,

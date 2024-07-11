@@ -31,7 +31,6 @@ return {
 		mason_lspconfig.setup({
 			ensure_installed = {
 				"lua_ls",
-				"pylsp",
 				"basedpyright",
 				"ruff_lsp",
 			},
