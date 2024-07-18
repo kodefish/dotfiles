@@ -28,6 +28,12 @@ return {
 			dapui.close()
 		end
 
+        -- Setup virtual text
+        local dap_virtual_text = require("nvim-dap-virtual-text")
+        dap_virtual_text.setup({
+            virt_text_pos = 'eol'
+        })
+
 		-- Keymaps
 		vim.keymap.set("n", "<leader>du", dapui.toggle, { desc = "Dap UI" })
 		vim.keymap.set({ "n", "v" }, "<leader>de", dapui.eval, { desc = "Eval" })
