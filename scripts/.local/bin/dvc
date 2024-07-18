@@ -1,9 +1,14 @@
 #!/bin/bash
 
 # Utility script for common devcontainer commands
+dvc_build() {
+    # NOTE: we use build as it also accepts a dotfiles repo 
+    devcontainer up --workspace-folder . --dotfiles-repository https://github.com/kodefish/dotfiles --dotfiles-install-command "install.sh" --additional-features '{"ghcr.io/devcontainers/features/nix:1":{},"ghcr.io/nils-geistmann/devcontainers-features/zsh:0":{}}' --remove-existing-container
+} 
+
 # Alias for devcontainer up command
 dvc_up() {
-    devcontainer up --workspace-folder . --dotfiles-repository https://github.com/kodefish/dotfiles --dotfiles-install-command "install.sh" --additional-features '{"ghcr.io/devcontainers/features/nix:1":{},"ghcr.io/nils-geistmann/devcontainers-features/zsh:0":{}}' --remove-existing-container
+    devcontainer up --workspace-folder . 
 } 
 
 # Alias for devcontainer exec command
@@ -13,6 +18,9 @@ dvc_attach() {
 
 # Main function to handle input commands
 case "$1" in
+    build)
+        dvc_build
+        ;;
     up)
         dvc_up
         ;;
@@ -20,6 +28,6 @@ case "$1" in
         dvc_attach
         ;;
     *)
-        echo "Usage: $0 {up|attach}"
+        echo "Usage: $0 {build|up|attach}"
         ;;
 esac

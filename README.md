@@ -40,6 +40,12 @@ A fun TODO would be to enable Mason to auto-install these packages automatically
 - k9s: https://github.com/catppuccin/k9s
 
 # TODO
+1. Devcontainer Setup
+    1. Figure out how to inject nix and zsh features via cli
+    2. Create custom "dc" command
+        1. `dc build`: Alias devcontainer creation to inject dotfiles
+        2. `dc up`: Alias devcontainer up
+        3. `dc attach`: Alias devcontainer exec $SHELL etc etc
 1. 0 timeout on pressing escape
 4. Setup debugging (using docker)
 3. Replicate LazyVim keybindings (and groups for which-key)
