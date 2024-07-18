@@ -42,7 +42,8 @@ return {
 		})
 
 		local dap_python = require("dap-python")
-		dap_python.setup(vim.fn.stdpath("data") .. "/mason/packages/debugpy/venv/bin/python")
+        dap_python.setup("python")
+
 
 		-- Keymaps
 		vim.keymap.set("n", "<leader>db", dap.toggle_breakpoint, { desc = "Toggle breakpoint" })

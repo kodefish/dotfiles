@@ -23,7 +23,7 @@ return {
 		})
 
         -- TODO: Detect which LSP / Tools are necessary based on the host os
-        -- Python: [basedpyright, ruff_lsp, debugpy]
+        -- Python: [basedpyright, ruff_lsp]
         -- Lua: [lua_ls, stylua]
 
 
@@ -42,7 +42,6 @@ return {
 		mason_tool_installer.setup({
 			ensure_installed = {
 				"stylua", -- lua formatter
-                "debugpy",  -- python debugger
 			},
 		})
 	end,
