@@ -70,7 +70,7 @@ return {
 			bufopts.desc = "Restart LSP"
 			vim.keymap.set("n", "<leader>lr", "<cmd>LspRestart<cr>", opts)
 
-			if client.name == "ruff_lsp" then
+			if client.name == "ruff" then
 				-- Disable hover in favor of Pyright
 				client.server_capabilities.hoverProvider = false
 			end
@@ -109,10 +109,24 @@ return {
 			},
 		})
 
-		lspconfig.ruff_lsp.setup({
+		lspconfig.ruff.setup({
 			capabilities = capabilities,
 			on_attach = on_attach,
-			settings = {},
+			init_options = {
+				settings = {
+					configurationPreference = "filesystemFirst", -- workspace config takes precedence
+					fixAll = false, -- disable source.fixAll action
+					lint = {
+						extendSelect = {
+							"I", -- Import sorting (isort)
+							"F", -- Pyflakes (basic linting and static analysis)
+							"E", -- Error checking (generally part of pyflakes and pylint)
+							"C", -- Cyclomatic complexity and other code complexity checks
+							"R", -- Refactor and code quality checks
+						},
+					},
+				},
+			},
 		})
 
 		lspconfig.gopls.setup({

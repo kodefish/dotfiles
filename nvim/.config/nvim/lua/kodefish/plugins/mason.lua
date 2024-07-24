@@ -32,7 +32,7 @@ return {
 			ensure_installed = {
 				"lua_ls",
 				"basedpyright",
-				"ruff_lsp",
+				"ruff",
 			},
 			-- auto-install configured servers
 			automatic_installation = true,
