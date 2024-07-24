@@ -16,8 +16,9 @@ return {
 				neotest_python({
 					dap = { justMyCode = false },
 					runner = "pytest",
-                    args = { "-v" },
-					python = "python", -- nvim is already running in the appropriate environment
+					args = { "-v" },
+                     -- nvim is already running in the appropriate environment (e.g. devcontainer / virtual env)
+					python = "python",
 				}),
 			},
 			status = { virtual_text = true },
@@ -34,8 +35,8 @@ return {
 			neotest.run.run(vim.uv.cwd())
 		end, { desc = "Run Project" })
 		vim.keymap.set("n", "<leader>tl", neotest.run.run_last, { desc = "Run Last" })
-        -- NOTE: The summary is more like a test outline, and the output looks more like a summary, so for mnemonics
-        -- it is easier to switch the two panels
+		-- NOTE: The summary is more like a test outline, and the output looks more like a summary, so for mnemonics
+		-- it is easier to switch the two panels
 		vim.keymap.set("n", "<leader>to", neotest.summary.toggle, { desc = "Toggle Outline" })
 		vim.keymap.set("n", "<leader>ts", neotest.output_panel.toggle, { desc = "Toggle Summary" })
 		vim.keymap.set("n", "<leader>tS", neotest.run.stop, { desc = "Stop" })
@@ -43,9 +44,9 @@ return {
 			neotest.watch.toggle(vim.fn.expand("%"))
 		end, { desc = "Toggle Watch" })
 
-        -- Debug keybindings (debug nearest 
-		vim.keymap.set("n", "<leader>dn", function()
+		-- Debug keybindings (debug nearest
+		vim.keymap.set("n", "<leader>td", function()
 			neotest.run.run({ strategy = "dap" })
-		end, { desc = "[D]ebug [N]earest" })
+		end, { desc = "Debug Nearest Test" })
 	end,
 }
