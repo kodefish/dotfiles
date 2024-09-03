@@ -13,11 +13,13 @@ return {
 		wk.register({
 			["<leader>"] = {
 				b = { name = "+buffer" },
-                c = { name = "+code" },
+				c = { name = "+code" },
 				d = { name = "+debug" },
-                f = {name = "+file"},
-                g = {name = "+git"},
-                t = {name = "+tasks"},
+				f = { name = "+file" },
+				g = { name = "+git" },
+				l = { name = "+lint" },
+				t = { name = "+tests" },
+				x = { name = "+trouble" },
 			},
 		})
 	end,

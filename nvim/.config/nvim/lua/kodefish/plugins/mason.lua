@@ -22,10 +22,9 @@ return {
 			},
 		})
 
-        -- TODO: Detect which LSP / Tools are necessary based on the host os
-        -- Python: [basedpyright, ruff_lsp]
-        -- Lua: [lua_ls, stylua]
-
+		-- TODO: Detect which LSP / Tools are necessary based on the host os
+		-- Python: [basedpyright, ruff_lsp, mypy]
+		-- Lua: [lua_ls, stylua]
 
 		-- Add default lsp servers
 		mason_lspconfig.setup({
@@ -42,6 +41,7 @@ return {
 		mason_tool_installer.setup({
 			ensure_installed = {
 				"stylua", -- lua formatter
+				"mypy", -- python linter
 			},
 		})
 	end,
