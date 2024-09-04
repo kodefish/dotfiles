@@ -16,7 +16,7 @@ return {
 				neotest_python({
 					dap = { justMyCode = false },
 					runner = "pytest",
-					args = { "-v" },
+					args = { "-vv", "--color=no" },
                      -- nvim is already running in the appropriate environment (e.g. devcontainer / virtual env)
 					python = "python",
 				}),
