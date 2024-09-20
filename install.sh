@@ -5,7 +5,7 @@ export XDG_CONFIG_HOME="${HOME}/.config"
 mkdir -p $XDG_CONFIG_HOME
 
 # Set zsh as main shell
-sudo chsh -s $(which zsh) $(whoami)
+sudo chsh -s $(which zsh) $(whoami) || echo "Failed to change shell, continuing..."
 
 # install Nix packages from config.nixstow is not yet installed
 ln -sf "${PWD}/nixpkgs/.config/nixpkgs" "${XDG_CONFIG_HOME}/nixpkgs"
