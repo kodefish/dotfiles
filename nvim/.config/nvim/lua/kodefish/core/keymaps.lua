@@ -9,6 +9,9 @@ keymap.set("n", "<leader>nh", "<cmd>nohl<cr>", { desc = "Clear search highlights
 
 -- yank to system clipboard using leader key
 keymap.set({ "n", "v" }, "<leader>y", [["+y]], { desc = "Yank to system clipboard" })
+keymap.set("n", "<leader>cfr", "<cmd>let @+ = expand('%:.')<cr>", { desc = "Yank relative filename to clipboard" })
+keymap.set("n", "<leader>cfa", "<cmd>let @+ = expand('%:p')<cr>", { desc = "Yank absolute filename to clipboard" })
+keymap.set("n", "<leader>cfn", "<cmd>let @+ = expand('%:t')<cr>", { desc = "Yank filename to clipboard" })
 
 -- Move up and down by visual (wrapped) lines
 keymap.set("n", "j", "gj", { noremap = true, silent = true })
@@ -26,9 +29,6 @@ local function toggle_wrap_mode()
 	print("Toggled wrap", window_options.wrap)
 end
 keymap.set("n", "<leader>w", toggle_wrap_mode, { desc = "Toggle wrap" })
-
--- Buffer management
-keymap.set("n", "<leader>bd", "<cmd>bdelete<cr>", { desc = "Delete Buffer" })
 
 -- Split navigation defaults (may be overriden by vim-tmux-navigation)
 keymap.set("n", "<C-h>", "<C-w>h", { desc = "Navigate split left" })
