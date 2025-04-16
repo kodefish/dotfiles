@@ -10,18 +10,17 @@ return {
     },
     config = function()
         local wk = require("which-key")
-        wk.register({
-            ["<leader>"] = {
-                b = { name = "+buffer" },
-                c = { name = "+code" },
-                d = { name = "+debug" },
-                f = { name = "+file" },
-                g = { name = "+git" },
-                l = { name = "+lint" },
-                r = { name = "+refactor" },
-                t = { name = "+tests" },
-                x = { name = "+trouble" },
-            },
+
+        wk.add({
+            { "<leader>b", group = "buffer" },
+            { "<leader>c", group = "code" },
+            { "<leader>d", group = "debug" },
+            { "<leader>f", group = "file" },
+            { "<leader>g", group = "git" },
+            { "<leader>l", group = "lint" },
+            { "<leader>r", group = "refactor" },
+            { "<leader>t", group = "tests" },
+            { "<leader>x", group = "trouble" },
         })
     end,
 }
