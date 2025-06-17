@@ -3,17 +3,23 @@
 # Utility script for common devcontainer commands
 dvc_build() {
     # NOTE: we use build as it also accepts a dotfiles repo 
-    devcontainer up --workspace-folder . --dotfiles-repository https://github.com/kodefish/dotfiles --dotfiles-install-command "install.sh" --additional-features '{"ghcr.io/devcontainers/features/nix:1":{},"ghcr.io/nils-geistmann/devcontainers-features/zsh:0":{}}' --remove-existing-container
+    # devcontainer up --workspace-folder . --dotfiles-repository https://github.com/kodefish/dotfiles --dotfiles-install-command "install.sh" --additional-features '{"ghcr.io/devcontainers/features/nix:1":{},"ghcr.io/nils-geistmann/devcontainers-features/zsh:0":{}}' --remove-existing-container
+    devcontainer up --workspace-folder . --mount "type=bind,source=$HOME/.config/nvim,target=/root/.config/nvim" --remote-env XDG_CONFIG_HOME=/root/.config --additional-features '{"ghcr.io/duduribeiro/devcontainer-features/neovim:1":{}, "ghcr.io/jungaretti/features/ripgrep:1":{}' --remove-existing-container
+    # devcontainer up --workspace-folder . --dotfiles-repository https://github.com/kodefish/dotfiles --dotfiles-install-command "install.sh" --additional-features '{"ghcr.io/duduribeiro/devcontainer-features/neovim:1":{}, ghcr.io/jungaretti/features/ripgrep:1:{}' --remove-existing-container
 } 
 
 # Alias for devcontainer up command
 dvc_up() {
-    devcontainer up --workspace-folder . --dotfiles-repository https://github.com/kodefish/dotfiles --dotfiles-install-command "install.sh" --additional-features '{"ghcr.io/devcontainers/features/nix:1":{},"ghcr.io/nils-geistmann/devcontainers-features/zsh:0":{}}'
+    # devcontainer up --workspace-folder . --dotfiles-repository https://github.com/kodefish/dotfiles --dotfiles-install-command "install.sh" --additional-features '{"ghcr.io/devcontainers/features/nix:1":{},"ghcr.io/nils-geistmann/devcontainers-features/zsh:0":{}}'
+    # devcontainer up --workspace-folder . --mount "type=bind,source=$HOME/.config/nvim,target=/root/.config/nvim" --additional-features '{"ghcr.io/duduribeiro/devcontainer-features/neovim:1":{}, ghcr.io/jungaretti/features/ripgrep:1:{}'
+    devcontainer up --workspace-folder . --mount "type=bind,source=$HOME/.config/nvim,target=/root/.config/nvim" --remote-env XDG_CONFIG_HOME=/root/.config --additional-features '{"ghcr.io/duduribeiro/devcontainer-features/neovim:1":{}, "ghcr.io/jungaretti/features/ripgrep:1":{}'
+    # devcontainer up --workspace-folder . --dotfiles-repository https://github.com/kodefish/dotfiles --dotfiles-install-command "install.sh" --additional-features '{"ghcr.io/duduribeiro/devcontainer-features/neovim:1":{}, ghcr.io/jungaretti/features/ripgrep:1:{}'
 } 
 
 # Alias for devcontainer exec command
 dvc_attach() {
-    devcontainer exec --workspace-folder . ${SHELL}
+    # devcontainer exec --workspace-folder . ${SHELL}
+    devcontainer exec --workspace-folder . bash
 }
 
 # Main function to handle input commands
