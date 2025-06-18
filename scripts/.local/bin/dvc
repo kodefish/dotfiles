@@ -1,28 +1,64 @@
 #!/bin/bash
 
 # Utility script for common devcontainer commands
-dvc_build() {
-    # NOTE: we use build as it also accepts a dotfiles repo 
-    # devcontainer up --workspace-folder . --dotfiles-repository https://github.com/kodefish/dotfiles --dotfiles-install-command "install.sh" --additional-features '{"ghcr.io/devcontainers/features/nix:1":{},"ghcr.io/nils-geistmann/devcontainers-features/zsh:0":{}}' --remove-existing-container
-    devcontainer up --workspace-folder . --mount "type=bind,source=$HOME/.config/nvim,target=/root/.config/nvim" --remote-env XDG_CONFIG_HOME=/root/.config --additional-features '{"ghcr.io/duduribeiro/devcontainer-features/neovim:1":{}, "ghcr.io/jungaretti/features/ripgrep:1":{}' --remove-existing-container
-    # devcontainer up --workspace-folder . --dotfiles-repository https://github.com/kodefish/dotfiles --dotfiles-install-command "install.sh" --additional-features '{"ghcr.io/duduribeiro/devcontainer-features/neovim:1":{}, ghcr.io/jungaretti/features/ripgrep:1:{}' --remove-existing-container
-} 
 
-# Alias for devcontainer up command
-dvc_up() {
-    # devcontainer up --workspace-folder . --dotfiles-repository https://github.com/kodefish/dotfiles --dotfiles-install-command "install.sh" --additional-features '{"ghcr.io/devcontainers/features/nix:1":{},"ghcr.io/nils-geistmann/devcontainers-features/zsh:0":{}}'
-    # devcontainer up --workspace-folder . --mount "type=bind,source=$HOME/.config/nvim,target=/root/.config/nvim" --additional-features '{"ghcr.io/duduribeiro/devcontainer-features/neovim:1":{}, ghcr.io/jungaretti/features/ripgrep:1:{}'
-    devcontainer up --workspace-folder . --mount "type=bind,source=$HOME/.config/nvim,target=/root/.config/nvim" --remote-env XDG_CONFIG_HOME=/root/.config --additional-features '{"ghcr.io/duduribeiro/devcontainer-features/neovim:1":{}, "ghcr.io/jungaretti/features/ripgrep:1":{}'
-    # devcontainer up --workspace-folder . --dotfiles-repository https://github.com/kodefish/dotfiles --dotfiles-install-command "install.sh" --additional-features '{"ghcr.io/duduribeiro/devcontainer-features/neovim:1":{}, ghcr.io/jungaretti/features/ripgrep:1:{}'
-} 
+# Helper to select the correct devcontainer config
+select_devcontainer_config() {
+    local workspace_dir=$(pwd)
+    local configs=()
 
-# Alias for devcontainer exec command
-dvc_attach() {
-    # devcontainer exec --workspace-folder . ${SHELL}
-    devcontainer exec --workspace-folder . bash
+    # Add default paths
+    [[ -f "$workspace_dir/.devcontainer/devcontainer.json" ]] && configs+=("$workspace_dir/.devcontainer/devcontainer.json")
+    [[ -f "$workspace_dir/.devcontainer.json" ]] && configs+=("$workspace_dir/.devcontainer.json")
+
+    # Add paths for .devcontainer/*/devcontainer.json
+    while IFS= read -r -d '' file; do
+        configs+=("$file")
+    done < <(find "$workspace_dir/.devcontainer" -mindepth 2 -maxdepth 2 -name "devcontainer.json" -print0 2>/dev/null)
+
+    if [[ ${#configs[@]} -eq 0 ]]; then
+        echo "❌ No devcontainer.json found in expected locations." >&2
+        exit 1
+    elif [[ ${#configs[@]} -eq 1 ]]; then
+        echo "${configs[0]}"
+    else
+        printf "%s\n" "${configs[@]}" | fzf --prompt="Select devcontainer config: "
+    fi
 }
 
-# Main function to handle input commands
+# Run devcontainer up with selected config
+dvc_up() {
+    local config_path
+    config_path=$(select_devcontainer_config) || exit 1
+    devcontainer up \
+        --workspace-folder . \
+        --config "$config_path" \
+        --mount "type=bind,source=$HOME/.config/nvim,target=/root/.config/nvim" \
+        --remote-env XDG_CONFIG_HOME=/root/.config \
+        --additional-features '{"ghcr.io/duduribeiro/devcontainer-features/neovim:1":{}, "ghcr.io/jungaretti/features/ripgrep:1":{}}'
+}
+
+# Build version of up
+dvc_build() {
+    local config_path
+    config_path=$(select_devcontainer_config) || exit 1
+    devcontainer up \
+        --workspace-folder . \
+        --config "$config_path" \
+        --mount "type=bind,source=$HOME/.config/nvim,target=/root/.config/nvim" \
+        --remote-env XDG_CONFIG_HOME=/root/.config \
+        --additional-features '{"ghcr.io/duduribeiro/devcontainer-features/neovim:1":{}, "ghcr.io/jungaretti/features/ripgrep:1":{}}' \
+        --remove-existing-container
+}
+
+# Attach to devcontainer
+dvc_attach() {
+    local config_path
+    config_path=$(select_devcontainer_config) || exit 1
+    devcontainer exec --workspace-folder . --config "$config_path" bash
+}
+
+# Main CLI
 case "$1" in
     build)
         dvc_build
@@ -37,3 +73,4 @@ case "$1" in
         echo "Usage: $0 {build|up|attach}"
         ;;
 esac
+
