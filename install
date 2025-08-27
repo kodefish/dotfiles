@@ -16,5 +16,4 @@ ln -sf "${PWD}/git/.config/git" "${XDG_CONFIG_HOME}/git"
 ln -sf "${PWD}/nvim/.config/nvim" "${XDG_CONFIG_HOME}/nvim"
 ln -sf "${PWD}/zsh/.config/zsh/.zshrc" "${HOME}/.zshrc"
 ln -sf "${PWD}/zsh/.config/zsh" "${XDG_CONFIG_HOME}/zsh"
-ln -sf "${PWD}/ghostty/.config/ghostty" "${XDG_CONFIG_HOME}/ghostty"
 
