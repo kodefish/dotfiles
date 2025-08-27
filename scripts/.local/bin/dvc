@@ -55,7 +55,7 @@ dvc_build() {
 dvc_attach() {
     local config_path
     config_path=$(select_devcontainer_config) || exit 1
-    devcontainer exec --workspace-folder . --config "$config_path" bash
+    devcontainer exec --workspace-folder . --config "$config_path" zsh
 }
 
 # Main CLI
