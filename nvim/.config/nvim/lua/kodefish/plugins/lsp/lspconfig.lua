@@ -110,6 +110,7 @@ return {
 		})
 
 		lspconfig.ruff.setup({
+			cmd = { "ruff", "server", "--preview" },
 			capabilities = capabilities,
 			on_attach = on_attach,
 			init_options = {
