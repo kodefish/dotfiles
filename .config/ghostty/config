@@ -1,0 +1,8 @@
+theme = dark:catppuccin-frappe,light:catppuccin-latte
+font-family = "MesloLGMDZ Nerd Font Mono"
+font-size = 12
+font-thicken = true
+font-thicken-strength = 0
+
+cursor-style = block
+macos-titlebar-style = transparent
