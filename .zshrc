@@ -33,6 +33,7 @@ alias grep='grep --color=auto'
 alias diff='diff --color=auto'
 alias ip='ip -c=auto'
 alias mv='mv -i'
+alias ly='yadm enter lazygit'
 
 # Completions
 autoload -U compinit && compinit
