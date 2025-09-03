@@ -1,0 +1,11 @@
+[core]
+  longpaths = true
+
+[user]
+  name = Danil
+  email = danilivanov.ivanov@gmail.com
+
+# Override for work repos
+[includeIf "gitdir/i:/Users/divanov/Dev/work/**"]
+  path = /Users/divanov/.config/git/config.work
+
