@@ -12,8 +12,14 @@ if [ "$system_type" = "Darwin" ]; then
 
   BREWFILE="$HOME/.config/brew/Brewfile"
   if [ -f "$BREWFILE" ]; then
-    echo "Updating homebrew bundle"
+    echo "Updating system homebrew bundle"
     brew bundle --file="$BREWFILE"
+  fi
+
+  WORK_BREWFILE="$HOME/.config/brew/Brewfile.work"
+  if [ -f "$WORK_BREWFILE" ]; then
+    echo "Updating work homebrew bundle"
+    brew bundle --file="$WORK_BREWFILE"
   fi
 
 fi
