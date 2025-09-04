@@ -1,6 +1,7 @@
-theme = dark:catppuccin-frappe,light:catppuccin-latte
+# theme = dark:catppuccin-frappe,light:catppuccin-latte
+theme = catppuccin-frappe
 font-family = "MesloLGMDZ Nerd Font Mono"
-font-size = 12
+font-size = 15
 font-thicken = true
 font-thicken-strength = 0
 
