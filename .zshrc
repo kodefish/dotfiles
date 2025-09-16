@@ -33,10 +33,18 @@ alias grep='grep --color=auto'
 alias diff='diff --color=auto'
 alias ip='ip -c=auto'
 alias mv='mv -i'
+alias ld='lazydocker'
+alias lg='lazygit'
 alias ly='yadm enter lazygit'
 
 # Completions
 autoload -U compinit && compinit
+
+# Add custom scripts to PATH
+export PATH=$HOME/.local/bin:$PATH
+
+# Load work related config, if it exists
+[ -f ${XDG_CONFIG_HOME:-$HOME/.config}/zsh/work.zsh ] && source ${XDG_CONFIG_HOME:-$HOME/.config}/zsh/work.zsh
 
 if [[ -f "/opt/homebrew/bin/brew" ]] then
   # If you're using macOS, you'll want this enabled
