@@ -41,15 +41,24 @@ alias ly='yadm enter lazygit'
 autoload -U compinit && compinit
 
 # Add custom scripts to PATH
-export PATH=$HOME/.local/bin:$PATH
+export PATH="$HOME/.local/bin:$PATH"
+
+# Add global pixi executables to the PATH
+export PATH="$HOME/.pixi/bin:$PATH"
 
 # Load work related config, if it exists
 [ -f ${XDG_CONFIG_HOME:-$HOME/.config}/zsh/work.zsh ] && source ${XDG_CONFIG_HOME:-$HOME/.config}/zsh/work.zsh
+
+# Set up fzf key bindings and fuzzy completion
+source <(fzf --zsh)
 
 if [[ -f "/opt/homebrew/bin/brew" ]] then
   # If you're using macOS, you'll want this enabled
   eval "$(/opt/homebrew/bin/brew shellenv)"
 fi
+
+# Setup direnv
+eval "$(direnv hook zsh)"
 
 ### MANAGED BY RANCHER DESKTOP START (DO NOT EDIT)
 export PATH="/Users/divanov/.rd/bin:$PATH"
