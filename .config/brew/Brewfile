@@ -1,0 +1,13 @@
+# Core CLI utilities
+brew "neovim"
+brew "ripgrep" # fast string search, used by neovim's Telescope plugin
+brew "tmux"
+brew "lazygit"
+brew "lazydocker"
+brew "bat"
+brew "devcontainer"
+brew "fzf"
+cask "alt-tab"
+brew "tree"
+brew "opencode"
+cask "nikitabobko/tap/aerospace"
