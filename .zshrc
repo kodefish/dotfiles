@@ -36,6 +36,7 @@ alias mv='mv -i'
 alias ld='lazydocker'
 alias lg='lazygit'
 alias ly='yadm enter lazygit'
+alias vim='nvim'
 
 # Completions
 autoload -U compinit && compinit
@@ -45,6 +46,9 @@ export PATH="$HOME/.local/bin:$PATH"
 
 # Add global pixi executables to the PATH
 export PATH="$HOME/.pixi/bin:$PATH"
+
+# Set nvim as EDITOR
+export EDITOR=nvim
 
 # Load work related config, if it exists
 [ -f ${XDG_CONFIG_HOME:-$HOME/.config}/zsh/work.zsh ] && source ${XDG_CONFIG_HOME:-$HOME/.config}/zsh/work.zsh
