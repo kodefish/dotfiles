@@ -27,7 +27,7 @@ return {
         })
 
         -- TODO: Detect which LSP / Tools are necessary based on the host os
-        -- Python: [basedpyright, ruff_lsp, mypy]
+        -- Python: [basedpyright, ruff_lsp]
         -- Lua: [lua_ls, stylua]
 
         -- Add default lsp servers
@@ -36,6 +36,7 @@ return {
                 "lua_ls",
                 "basedpyright",
                 "ruff",
+                "yamlls",
             },
             -- auto-install configured servers
             automatic_installation = true,
@@ -45,8 +46,8 @@ return {
         mason_tool_installer.setup({
             ensure_installed = {
                 "stylua", -- lua formatter
-                "mypy", -- python linter
                 "roslyn", -- dotnet compiler
+                "ty",   -- Python type-checker and lsp
             },
         })
     end,

@@ -19,7 +19,6 @@ return {
 		-- Lsp config
 		local lspconfig = require("lspconfig")
 		local cmp_nvim_lsp = require("cmp_nvim_lsp")
-		local util = require("lspconfig.util")
 
 		-- set general keymaps
 		local opts = { noremap = true, silent = true }
@@ -36,7 +35,7 @@ return {
 		end, opts)
 
 		opts.desc = "Go to next diagnostic"
-		vim.keymap.set("n", "[d", function()
+		vim.keymap.set("n", "]d", function()
 			vim.diagnostic.jump({ count = 1 })
 		end, opts)
 
@@ -77,6 +76,8 @@ return {
 			bufopts.desc = "Restart LSP"
 			vim.keymap.set("n", "<leader>lr", "<cmd>LspRestart<cr>", opts)
 
+			bufopts.desc = "Show completions"
+			vim.keymap.set("i", "<c-Space>", vim.lsp.completion.get, opts)
 			if client.name == "ruff" then
 				-- Disable hover in favor of Pyright
 				client.server_capabilities.hoverProvider = false
@@ -107,6 +108,10 @@ return {
 			capabilities = capabilities,
 			on_attach = on_attach,
 			settings = {
+				python = {
+					venvPath = ".",
+					venv = ".venv",
+				},
 				basedpyright = {
 					analysis = {
 						autoSearchPaths = true,
