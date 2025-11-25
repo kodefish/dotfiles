@@ -39,6 +39,9 @@ automatically-unhide-macos-hidden-apps = false
 [key-mapping]
     preset = 'qwerty'
 
+[key-mapping.key-notation-to-key-code]
+    prefix = 's'
+
 # Gaps between windows (inner-*) and between monitor edges (outer-*).
 # Possible values:
 # - Constant:     gaps.outer.top = 8
@@ -60,11 +63,19 @@ automatically-unhide-macos-hidden-apps = false
 # 'main' binding mode must be always presented
 # Fallback value (if you omit the key): mode.main.binding = {}
 [mode.main.binding]
-    ctrl-g = "mode prefix"
+    ctrl-prefix = "mode prefix"
+
+    # Disable hide
+    cmd-h = []
+    cmd-alt-h = []
 
 [mode.prefix.binding]
-    r = ['reload-config', 'mode main']
-    s = 'mode main'
+    # Make it easy to go back to main mode
+    prefix = 'mode main'
+    # ctrl-prefix = 'mode main'
+    esc = 'mode main'
+
+    shift-c = ['reload-config', 'mode main']
 
     # All possible keys:
     # - Letters.        a, b, c, ...,
@@ -98,23 +109,16 @@ automatically-unhide-macos-hidden-apps = false
     comma = ['layout accordion horizontal', 'mode main']
 
     # See: https://nikitabobko.github.io/AeroSpace/commands#focus
-    h = ['focus left', 'mode main']
-    j = ['focus down', 'mode main']
-    k = ['focus up', 'mode main']
-    l = ['focus right', 'mode main']
-
-    n = ['focus dfs-next', 'mode main']
-    p = ['focus dfs-prev', 'mode main']
+    h = ['focus --boundaries-action wrap-around-the-workspace left', 'mode main']
+    j = ['focus --boundaries-action wrap-around-the-workspace down', 'mode main']
+    k = ['focus --boundaries-action wrap-around-the-workspace up', 'mode main']
+    l = ['focus --boundaries-action wrap-around-the-workspace right', 'mode main']
 
     # See: https://nikitabobko.github.io/AeroSpace/commands#move
-    shift-h = ['move left', 'mode main']
-    shift-j = ['move down', 'mode main']
-    shift-k = ['move up', 'mode main']
-    shift-l = ['move right', 'mode main']
-
-    # See: https://nikitabobko.github.io/AeroSpace/commands#resize
-    minus = ['resize smart -50', 'mode main']
-    equal = ['resize smart +50', 'mode main']
+    shift-h = ['swap --wrap-around left', 'mode main']
+    shift-j = ['swap --wrap-around down', 'mode main']
+    shift-k = ['swap --wrap-around up', 'mode main']
+    shift-l = ['swap --wrap-around right', 'mode main']
 
     # See: https://nikitabobko.github.io/AeroSpace/commands#workspace
     1 = ['workspace 1', 'mode main']    # Dev
@@ -126,43 +130,33 @@ automatically-unhide-macos-hidden-apps = false
     7 = ['workspace 7', 'mode main']    # Media                           
 
     # See: https://nikitabobko.github.io/AeroSpace/commands#move-node-to-workspace
-    shift-1 = ['move-node-to-workspace 1', 'mode main']
-    shift-2 = ['move-node-to-workspace 2', 'mode main']
-    shift-3 = ['move-node-to-workspace 3', 'mode main']
-    shift-4 = ['move-node-to-workspace 4', 'mode main']
-    shift-5 = ['move-node-to-workspace 5', 'mode main']
-    shift-6 = ['move-node-to-workspace 6', 'mode main']
-    shift-7 = ['move-node-to-workspace 7', 'mode main']
+    shift-1 = ['move-node-to-workspace 1', 'workspace 1', 'mode main']
+    shift-2 = ['move-node-to-workspace 2', 'workspace 2', 'mode main']
+    shift-3 = ['move-node-to-workspace 3', 'workspace 3', 'mode main']
+    shift-4 = ['move-node-to-workspace 4', 'workspace 4', 'mode main']
+    shift-5 = ['move-node-to-workspace 5', 'workspace 5', 'mode main']
+    shift-6 = ['move-node-to-workspace 6', 'workspace 6', 'mode main']
+    shift-7 = ['move-node-to-workspace 7', 'workspace 7', 'mode main']
 
     # See: https://nikitabobko.github.io/AeroSpace/commands#workspace-back-and-forth
     tab = ['workspace-back-and-forth', 'mode main']
     # See: https://nikitabobko.github.io/AeroSpace/commands#move-workspace-to-monitor
     shift-tab = ['move-workspace-to-monitor --wrap-around next', 'mode main']
 
+    n = ['workspace --wrap-around next', 'mode main']
+    p = ['workspace --wrap-around prev', 'mode main']
 
-    # See: https://nikitabobko.github.io/AeroSpace/commands#mode
-    semicolon = ['mode service', 'mode main']
+    shift-r = 'mode resize'
+    equal = 'balance-sizes'
 
-# 'service' binding mode declaration.
-# See: https://nikitabobko.github.io/AeroSpace/guide#binding-modes
-[mode.service.binding]
-    esc = ['reload-config', 'mode main']
-    r = ['flatten-workspace-tree', 'mode main'] # reset layout
-    f = ['layout floating tiling', 'mode main'] # Toggle between floating and tiling layout
-    backspace = ['close-all-windows-but-current', 'mode main']
+[mode.resize.binding]
+    # See: https://nikitabobko.github.io/AeroSpace/commands#resize
+    minus = 'resize smart -50'
+    equal = 'resize smart +50'
+    enter = 'mode main'
+    esc = 'mode main'
 
-    # sticky is not yet supported https://github.com/nikitabobko/AeroSpace/issues/2
-    #s = ['layout sticky tiling', 'mode main']
-
-    alt-shift-h = ['join-with left', 'mode main']
-    alt-shift-j = ['join-with down', 'mode main']
-    alt-shift-k = ['join-with up', 'mode main']
-    alt-shift-l = ['join-with right', 'mode main']
-
-    down = 'volume down'
-    up = 'volume up'
-    shift-down = ['volume set 0', 'mode main']
-
+# Application assignments 
 [[on-window-detected]]
 if.app-id = "com.mitchellh.ghostty"
 run = "move-node-to-workspace 1"
@@ -200,3 +194,7 @@ run = "move-node-to-workspace 5"
 [[on-window-detected]]
 if.app-id = "com.apple.finder"
 run = "move-node-to-workspace 5"
+
+[[on-window-detected]]
+if.app-id = "com.apple.Music"
+run = "move-node-to-workspace 7"
