@@ -108,10 +108,10 @@ return {
 			capabilities = capabilities,
 			on_attach = on_attach,
 			settings = {
-				python = {
-					venvPath = ".",
-					venv = ".venv",
-				},
+				-- python = {
+				-- 	for pixi: pythonPath = ".pixi/envs/something/bin/python",
+				-- 	for uv: venv = ".venv",
+				-- },
 				basedpyright = {
 					analysis = {
 						autoSearchPaths = true,
