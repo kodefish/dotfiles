@@ -23,6 +23,20 @@ return {
 					},
 				},
 			},
+			pickers = {
+				find_files = {
+					hidden = true, -- include .github, .env, etc.
+				},
+				live_grep = {
+					additional_args = function()
+						return {
+							"--hidden", -- search hidden files/dirs
+							"--glob",
+							"!.git/", -- but still ignore .git
+						}
+					end,
+				},
+			},
 			extensions = {
 				["ui-select"] = {
 					require("telescope.themes").get_dropdown({}),
@@ -34,25 +48,24 @@ return {
 		-- telescope.load_extension("fzf")
 		telescope.load_extension("ui-select")
 
-        -- Small wrapper around git_files to fallback on find_files when not in git repo
-        local function is_git_repo()
-            local handle = io.popen('git rev-parse --is-inside-work-tree 2>/dev/null')
-            local result = handle:read("*a")
-            handle:close()
-            return result:match('true')
-        end
+		-- Small wrapper around git_files to fallback on find_files when not in git repo
+		local function is_git_repo()
+			local handle = io.popen("git rev-parse --is-inside-work-tree 2>/dev/null")
+			local result = handle:read("*a")
+			handle:close()
+			return result:match("true")
+		end
 
-        local function project_files()
-            if is_git_repo() then
-                builtin.git_files()
-            else
-                builtin.find_files()
-            end
-        end
+		local function project_files()
+			if is_git_repo() then
+				builtin.git_files()
+			else
+				builtin.find_files()
+			end
+		end
 
 		-- Keymaps
-		vim.keymap.set("n", "<leader>ff", builtin.find_files, { desc = "Fuzzy find files in cwd" })
-		vim.keymap.set("n", "<leader>fg", project_files, { desc = "Fuzzy find files in git files" })
+		vim.keymap.set("n", "<leader>ff", project_files, { desc = "Fuzzy find files in project (git or cwd)" })
 		vim.keymap.set("n", "<leader>fs", builtin.live_grep, { desc = "Fuzzy find string in files in cwd" })
 		vim.keymap.set("n", "<leader>fb", builtin.buffers, { desc = "Show open buffers" })
 		vim.keymap.set({ "n", "v" }, "<leader>fc", builtin.grep_string, { desc = "Search string under cursor in cwd" })
