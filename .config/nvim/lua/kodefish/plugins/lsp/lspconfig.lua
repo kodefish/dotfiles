@@ -152,12 +152,14 @@ return {
 		}
 
 		lspconfig.yamlls.setup({
-			capabilities = yamlls_capabilities,
 			on_attach = on_attach,
 			settings = {
 				yaml = {
 					format = {
 						enable = true,
+					},
+					schemas = {
+						["https://json.schemastore.org/github-workflow.json"] = "/.github/workflows/*",
 					},
 				},
 			},
