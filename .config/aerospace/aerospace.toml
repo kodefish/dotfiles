@@ -69,6 +69,16 @@ automatically-unhide-macos-hidden-apps = false
     cmd-h = []
     cmd-alt-h = []
 
+[workspace-to-monitor-force-assignment]
+    1 = '1' # Left monitor
+    2 = '3' # Right monitor
+    # main is always the laptop
+    3 = 'main'
+    4 = 'main'
+    5 = 'main'
+    6 = 'main'
+    7 = 'main'
+
 [mode.prefix.binding]
     # Make it easy to go back to main mode
     prefix = 'mode main'
