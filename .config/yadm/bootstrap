@@ -22,4 +22,28 @@ if [ "$system_type" = "Darwin" ]; then
     brew bundle --file="$WORK_BREWFILE"
   fi
 
+  # Change default shell to fish if available and not already set
+  if command -v fish >/dev/null 2>&1; then
+    FISH_PATH=$(which fish)
+    CURRENT_SHELL=$(dscl . -read /Users/"$(whoami)" UserShell 2>/dev/null | awk '{print $2}')
+    # Fallback to $SHELL if dscl isn't available or returns empty
+    if [ -z "$CURRENT_SHELL" ]; then
+      CURRENT_SHELL="$SHELL"
+    fi
+
+    # Ensure fish is listed in /etc/shells
+    if ! grep -q "$FISH_PATH" /etc/shells; then
+      echo "Adding fish to /etc/shells"
+      echo "$FISH_PATH" | sudo tee -a /etc/shells >/dev/null
+    fi
+
+    # Only change if not already fish
+    if [ "$CURRENT_SHELL" != "$FISH_PATH" ]; then
+      echo "Changing default shell to fish"
+      chsh -s "$FISH_PATH" "$(whoami)"
+    else
+      echo "Fish is already the default shell"
+    fi
+  fi
+
 fi
