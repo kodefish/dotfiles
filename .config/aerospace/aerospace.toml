@@ -177,7 +177,17 @@ if.window-title-regex-substring = "Work"
 run = "move-node-to-workspace 2"
 
 [[on-window-detected]]
+if.app-id = "com.google.Chrome"
+if.window-title-regex-substring = "Work"
+run = "move-node-to-workspace 2"
+
+[[on-window-detected]]
 if.app-id = "org.mozilla.firefox"
+if.window-title-regex-substring = "Personal"
+run = "move-node-to-workspace 3"
+
+[[on-window-detected]]
+if.app-id = "com.google.Chrome"
 if.window-title-regex-substring = "Personal"
 run = "move-node-to-workspace 3"
 
