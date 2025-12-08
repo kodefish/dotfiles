@@ -11,3 +11,4 @@ brew "direnv"
 brew "gh"
 tap "flyteorg/homebrew-tap"
 brew "flytectl"
+brew "gomplate" # Go templating CLI
