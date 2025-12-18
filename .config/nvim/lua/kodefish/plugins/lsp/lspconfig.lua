@@ -103,25 +103,30 @@ return {
 			},
 		})
 
-		-- Python
-		lspconfig.basedpyright.setup({
-			capabilities = capabilities,
-			on_attach = on_attach,
-			settings = {
-				-- python = {
-				-- 	for pixi: pythonPath = ".pixi/envs/something/bin/python",
-				-- 	for uv: venv = ".venv",
-				-- },
-				basedpyright = {
-					analysis = {
-						autoSearchPaths = true,
-						diagnosticMode = "openFilesOnly",
-						typeCheckingMode = "standard",
-						useLibraryCodeForTypes = true,
-					},
+	-- Python
+	lspconfig.basedpyright.setup({
+		capabilities = capabilities,
+		on_attach = on_attach,
+		root_dir = function(fname)
+			-- For UV workspaces, find the root pyproject.toml (workspace root)
+			local util = require("lspconfig.util")
+			return util.root_pattern(".git", "uv.lock")(fname) or util.find_git_ancestor(fname)
+		end,
+		settings = {
+			-- python = {
+			-- 	for pixi: pythonPath = ".pixi/envs/something/bin/python",
+			-- 	for uv: venv = ".venv",
+			-- },
+			basedpyright = {
+				analysis = {
+					autoSearchPaths = true,
+					diagnosticMode = "openFilesOnly",
+					typeCheckingMode = "standard",
+					useLibraryCodeForTypes = true,
 				},
 			},
-		})
+		},
+	})
 
 		lspconfig.ruff.setup({
 			cmd = { "ruff", "server", "--preview" },
@@ -152,7 +157,19 @@ return {
 		}
 
 		lspconfig.yamlls.setup({
-			on_attach = on_attach,
+			on_attach = function(client, bufnr)
+				-- Don't attach to .jinja template files (they contain Jinja syntax)
+				local filename = vim.api.nvim_buf_get_name(bufnr)
+				if filename:match("%.jinja2?$") then
+					-- Detach immediately to prevent LSP errors
+					vim.schedule(function()
+						vim.lsp.buf_detach_client(bufnr, client.id)
+					end)
+					return
+				end
+				-- Attach normally for regular YAML files
+				on_attach(client, bufnr)
+			end,
 			settings = {
 				yaml = {
 					format = {
