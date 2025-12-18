@@ -13,10 +13,22 @@ return {
                     "markdown_inline",
                     "dockerfile",
                     "c_sharp",
+                    "yaml",
                 },
                 sync_install = false,
                 auto_install = true,
-                highlight = { enable = true },
+                highlight = {
+                    enable = true,
+                    -- Disable treesitter for .jinja template files (they have structural Jinja)
+                    -- Falls back to vim regex syntax which handles mixed Jinja+YAML better
+                    disable = function(lang, buf)
+                        local filename = vim.api.nvim_buf_get_name(buf)
+                        if lang == "yaml" and (filename:match("%.jinja$") or filename:match("%.jinja2$")) then
+                            return true
+                        end
+                        return false
+                    end,
+                },
                 indent = { enable = true },
             })
         end,
