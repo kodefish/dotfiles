@@ -54,6 +54,11 @@ set -gx PATH "$HOME/.pixi/bin" $PATH
 # Set nvim as EDITOR
 set -gx EDITOR nvim
 
+# Set config stuff (used by k9s to load config)
+set -gx XDG_CONFIG_HOME "$HOME/.config"
+set -gx XDG_DATA_HOME "$HOME/.local/share"
+set -gx XDG_CACHE_HOME "$HOME/.cache"
+
 # Brew shellenv for Apple Silicon
 if test -f /opt/homebrew/bin/brew
     eval (/opt/homebrew/bin/brew shellenv)
