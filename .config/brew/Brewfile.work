@@ -1,5 +1,6 @@
 brew "python@3.11"
-brew "terraform"
+tap "hashicorp/tap"
+brew "hashicorp/tap/terraform"
 cask "google-cloud-sdk"
 cask "pantsbuild/tap/pants"
 brew "pipx"
