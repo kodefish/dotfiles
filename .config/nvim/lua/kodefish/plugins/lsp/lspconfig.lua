@@ -17,7 +17,6 @@ return {
 		neoconf.setup()
 
 		-- Lsp config
-		local lspconfig = require("lspconfig")
 		local cmp_nvim_lsp = require("cmp_nvim_lsp")
 
 		-- set general keymaps
@@ -87,7 +86,11 @@ return {
 		local capabilities = cmp_nvim_lsp.default_capabilities()
 
 		-- Lua
-		lspconfig.lua_ls.setup({
+		vim.lsp.enable("lua_ls")
+		vim.lsp.config("lua_ls", {
+			cmd = { "lua-language-server" },
+			filetypes = { "lua" },
+			root_markers = { ".luarc.json", ".luarc.jsonc", ".luacheckrc", ".stylua.toml", "stylua.toml", "selene.toml", "selene.yml", ".git" },
 			capabilities = capabilities,
 			on_attach = on_attach,
 			settings = {
@@ -104,14 +107,13 @@ return {
 		})
 
 	-- Python
-	lspconfig.basedpyright.setup({
+	vim.lsp.enable("basedpyright")
+	vim.lsp.config("basedpyright", {
+		cmd = { "basedpyright-langserver", "--stdio" },
+		filetypes = { "python" },
+		root_markers = { ".git", "uv.lock", "pyproject.toml", "setup.py" },
 		capabilities = capabilities,
 		on_attach = on_attach,
-		root_dir = function(fname)
-			-- For UV workspaces, find the root pyproject.toml (workspace root)
-			local util = require("lspconfig.util")
-			return util.root_pattern(".git", "uv.lock")(fname) or util.find_git_ancestor(fname)
-		end,
 		settings = {
 			-- python = {
 			-- 	for pixi: pythonPath = ".pixi/envs/something/bin/python",
@@ -128,22 +130,23 @@ return {
 		},
 	})
 
-		lspconfig.ruff.setup({
+		vim.lsp.enable("ruff")
+		vim.lsp.config("ruff", {
 			cmd = { "ruff", "server", "--preview" },
+			filetypes = { "python" },
+			root_markers = { ".git", "pyproject.toml", "ruff.toml", ".ruff.toml" },
 			capabilities = capabilities,
 			on_attach = on_attach,
-			init_options = {
-				settings = {
-					configurationPreference = "filesystemFirst", -- workspace config takes precedence
-					fixAll = false, -- disable source.fixAll action
-					lint = {
-						extendSelect = {
-							"I", -- Import sorting (isort)
-							"F", -- Pyflakes (basic linting and static analysis)
-							"E", -- Error checking (generally part of pyflakes and pylint)
-							"C", -- Cyclomatic complexity and other code complexity checks
-							"R", -- Refactor and code quality checks
-						},
+			settings = {
+				configurationPreference = "filesystemFirst", -- workspace config takes precedence
+				fixAll = false, -- disable source.fixAll action
+				lint = {
+					extendSelect = {
+						"I", -- Import sorting (isort)
+						"F", -- Pyflakes (basic linting and static analysis)
+						"E", -- Error checking (generally part of pyflakes and pylint)
+						"C", -- Cyclomatic complexity and other code complexity checks
+						"R", -- Refactor and code quality checks
 					},
 				},
 			},
@@ -156,7 +159,12 @@ return {
 			lineFoldingOnly = true,
 		}
 
-		lspconfig.yamlls.setup({
+		vim.lsp.enable("yamlls")
+		vim.lsp.config("yamlls", {
+			cmd = { "yaml-language-server", "--stdio" },
+			filetypes = { "yaml", "yaml.docker-compose" },
+			root_markers = { ".git" },
+			capabilities = yamlls_capabilities,
 			on_attach = function(client, bufnr)
 				-- Don't attach to .jinja template files (they contain Jinja syntax)
 				local filename = vim.api.nvim_buf_get_name(bufnr)
@@ -192,6 +200,7 @@ return {
 			ft = { "cs" }, -- only attach to C# files
 		})
 
+		vim.lsp.enable("roslyn")
 		vim.lsp.config("roslyn", {
 			cmd = {
 				vim.fn.stdpath("data") .. "/mason/bin" .. "/roslyn",
