@@ -38,12 +38,34 @@ return {
 				["<C-e>"] = cmp.mapping.abort(), -- close completion window
 				["<CR>"] = cmp.mapping.confirm({ select = true }),
 			}),
+			-- Improved sorting to prioritize relevant items
+			sorting = {
+				priority_weight = 2,
+				comparators = {
+					cmp.config.compare.offset,
+					cmp.config.compare.exact,
+					cmp.config.compare.score,
+					cmp.config.compare.recently_used,
+					cmp.config.compare.locality,
+					cmp.config.compare.kind,
+					cmp.config.compare.sort_text,
+					cmp.config.compare.length,
+					cmp.config.compare.order,
+				},
+			},
+			-- Optimized source configuration with priorities
 			sources = cmp.config.sources({
-				{ name = "nvim_lsp" }, -- lsp completions
-				{ name = "luasnip" }, -- text from buffer
-				{ name = "buffer" }, -- text from buffer
-				{ name = "path" }, -- file system paths
+				{ name = "nvim_lsp", priority = 1000 }, -- highest priority for LSP
+				{ name = "luasnip", priority = 750 }, -- snippets second
+				{ name = "buffer", priority = 500, keyword_length = 3 }, -- buffer requires 3 chars
+				{ name = "path", priority = 250 }, -- paths lowest priority
 			}),
+			-- Performance tuning
+			performance = {
+				debounce = 60,
+				throttle = 30,
+				fetching_timeout = 500,
+			},
 		})
 	end,
 }

@@ -1,4 +1,4 @@
-brew "python@3.11"
+brew "python@3.12"
 tap "hashicorp/tap"
 brew "hashicorp/tap/terraform"
 cask "google-cloud-sdk"

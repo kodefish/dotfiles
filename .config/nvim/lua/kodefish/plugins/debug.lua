@@ -40,9 +40,11 @@ return {
         -- Configure adapters
         -- Tools installed with Mason can be found at
         -- vim.fn.stdpath("data") .. "/mason/bin" .. "/<executable>"
+
         -- Python
+        -- debugpy installed via Mason, venv created at .local/share/nvim/mason/packages/debugpy/venv/bin/python
         local dap_python = require("dap-python")
-        dap_python.setup("uv")
+        dap_python.setup(vim.fn.stdpath("data") .. "/mason/packages/debugpy/venv/bin/python")
 
         -- C# / Dotnet
         -- Point dotnet dap to netcoredgb

@@ -90,7 +90,16 @@ return {
 		vim.lsp.config("lua_ls", {
 			cmd = { "lua-language-server" },
 			filetypes = { "lua" },
-			root_markers = { ".luarc.json", ".luarc.jsonc", ".luacheckrc", ".stylua.toml", "stylua.toml", "selene.toml", "selene.yml", ".git" },
+			root_markers = {
+				".luarc.json",
+				".luarc.jsonc",
+				".luacheckrc",
+				".stylua.toml",
+				"stylua.toml",
+				"selene.toml",
+				"selene.yml",
+				".git",
+			},
 			capabilities = capabilities,
 			on_attach = on_attach,
 			settings = {
@@ -106,29 +115,29 @@ return {
 			},
 		})
 
-	-- Python
-	vim.lsp.enable("basedpyright")
-	vim.lsp.config("basedpyright", {
-		cmd = { "basedpyright-langserver", "--stdio" },
-		filetypes = { "python" },
-		root_markers = { ".git", "uv.lock", "pyproject.toml", "setup.py" },
-		capabilities = capabilities,
-		on_attach = on_attach,
-		settings = {
-			-- python = {
-			-- 	for pixi: pythonPath = ".pixi/envs/something/bin/python",
-			-- 	for uv: venv = ".venv",
-			-- },
-			basedpyright = {
-				analysis = {
-					autoSearchPaths = true,
-					diagnosticMode = "openFilesOnly",
-					typeCheckingMode = "standard",
-					useLibraryCodeForTypes = true,
+		-- Python
+		vim.lsp.enable("basedpyright")
+		vim.lsp.config("basedpyright", {
+			cmd = { "basedpyright-langserver", "--stdio" },
+			filetypes = { "python" },
+			root_markers = { "uv.lock", "pyproject.toml", "setup.py", ".git" },
+			capabilities = capabilities,
+			on_attach = on_attach,
+			settings = {
+				-- python = {
+				-- 	for pixi: pythonPath = ".pixi/envs/something/bin/python",
+				-- 	for uv: venvPath = ".venv",
+				-- },
+				basedpyright = {
+					analysis = {
+						autoSearchPaths = true,
+						diagnosticMode = "openFilesOnly",
+						typeCheckingMode = "standard",
+						useLibraryCodeForTypes = true,
+					},
 				},
 			},
-		},
-	})
+		})
 
 		vim.lsp.enable("ruff")
 		vim.lsp.config("ruff", {
@@ -233,6 +242,17 @@ return {
 					dotnet_suppress_inlay_hints_for_parameters_that_match_method_intent = true,
 				},
 			},
+		})
+
+		-- Terraform
+		vim.lsp.enable("terraformls")
+		vim.lsp.config("terraformls", {
+			cmd = { "terraform-ls", "serve" },
+			filetypes = { "terraform", "terraform-vars" },
+			root_markers = { ".terraform", ".git" },
+			capabilities = capabilities,
+			on_attach = on_attach,
+			settings = {},
 		})
 	end,
 }

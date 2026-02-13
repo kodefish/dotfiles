@@ -37,6 +37,7 @@ return {
 				"basedpyright",
 				"ruff",
 				"yamlls",
+                "terraformls",
 			},
 			-- auto-install configured servers
 			automatic_installation = true,
@@ -48,6 +49,7 @@ return {
 				"stylua", -- lua formatter
 				"roslyn", -- dotnet compiler
 				"actionlint", -- Github action linter
+                "debugpy", -- Python debugger
 			},
 		})
 	end,

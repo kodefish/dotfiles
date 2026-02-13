@@ -3,5 +3,17 @@
   "$schema": "https://opencode.ai/config.json",
   "keybinds": {
     "leader": "ctrl+space"
+  },
+  "mcp": {
+    "jira": {
+      "type": "remote",
+      "url": "https://mcp.atlassian.com/v1/mcp",
+      "enabled": true
+    },
+    "confluence": {
+      "type": "remote",
+      "url": "https://mcp.atlassian.com/v1/mcp",
+      "enabled": true
+    }
   }
 }
