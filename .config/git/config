@@ -9,3 +9,5 @@
 [includeIf "gitdir/i:/Users/divanov/Dev/work/**"]
   path = /Users/divanov/.config/git/config.work
 
+[pull]
+	rebase = true
