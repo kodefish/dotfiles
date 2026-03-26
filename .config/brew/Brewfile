@@ -5,7 +5,7 @@ brew "ripgrep" # fast string search, used by neovim's Telescope plugin
 brew "tmux"
 brew "lazygit"
 brew "docker"
-brew "colima"
+cask "orbstack"
 brew "lazydocker"
 brew "bat"
 brew "devcontainer"
