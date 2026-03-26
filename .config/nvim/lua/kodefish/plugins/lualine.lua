@@ -3,6 +3,9 @@ return {
     opts = {
         options = {
             theme = "dracula"
-        }
+        },
+        sections = {
+            lualine_x = { "whichpy", "encoding", "fileformat", "filetype" },
+        },
     }
 }

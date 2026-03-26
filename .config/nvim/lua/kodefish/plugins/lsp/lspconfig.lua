@@ -1,4 +1,15 @@
 return {
+  {
+    "neolooong/whichpy.nvim",
+    dependencies = {
+      "mfussenegger/nvim-dap-python", -- optional: DAP support
+    },
+    opts = {},
+    keys = {
+      { "<leader>vp", "<cmd>WhichPy select<cr>", desc = "Select Python interpreter" },
+    },
+  },
+  {
 	"neovim/nvim-lspconfig",
 	lazy = false,
 	dependencies = {
@@ -124,10 +135,10 @@ return {
 			capabilities = capabilities,
 			on_attach = on_attach,
 			settings = {
-				-- python = {
+				python = {
 				-- 	for pixi: pythonPath = ".pixi/envs/something/bin/python",
 				-- 	for uv: venvPath = ".venv",
-				-- },
+				},
 				basedpyright = {
 					analysis = {
 						autoSearchPaths = true,
@@ -255,4 +266,5 @@ return {
 			settings = {},
 		})
 	end,
+  },
 }

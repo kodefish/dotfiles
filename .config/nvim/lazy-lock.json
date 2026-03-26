@@ -45,5 +45,6 @@
   "trouble.nvim": { "branch": "main", "commit": "bd67efe408d4816e25e8491cc5ad4088e708a69a" },
   "unimpaired.nvim": { "branch": "main", "commit": "4995cb674cb4c5e442f0cd9d86f6f9c20333a0b8" },
   "vim-illuminate": { "branch": "master", "commit": "0d1e93684da00ab7c057410fecfc24f434698898" },
-  "which-key.nvim": { "branch": "main", "commit": "3aab2147e74890957785941f0c1ad87d0a44c15a" }
+  "which-key.nvim": { "branch": "main", "commit": "3aab2147e74890957785941f0c1ad87d0a44c15a" },
+  "whichpy.nvim": { "branch": "main", "commit": "3b35bff7457d714b659d44796d4e182f44bf84e1" }
 }
