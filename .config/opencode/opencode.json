@@ -1,9 +1,6 @@
 
 {
   "$schema": "https://opencode.ai/config.json",
-  "keybinds": {
-    "leader": "ctrl+space"
-  },
   "mcp": {
     "jira": {
       "type": "remote",
@@ -14,6 +11,20 @@
       "type": "remote",
       "url": "https://mcp.atlassian.com/v1/mcp",
       "enabled": true
+    }
+  },
+  "provider": {
+    "litellm": {
+      "npm": "@ai-sdk/openai-compatible",
+      "name": "LiteLLM",
+      "options": {
+        "baseURL": "https://litellm.ml.dev.int.devinite.com/"
+      },
+      "models": {
+        "claude-sonnet-4-6": {
+          "name": "DG - Claude Sonnet 4.6"
+        }
+      }
     }
   }
 }
