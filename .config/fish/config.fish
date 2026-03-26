@@ -50,6 +50,8 @@ alias vim='nvim'
 # Add custom scripts to PATH
 set -gx PATH "$HOME/.local/bin" $PATH
 set -gx PATH "$HOME/.pixi/bin" $PATH
+# Increase file descriptor limit (needed for rattler/pixi with many projects)
+ulimit -n 65536
 
 # Set nvim as EDITOR
 set -gx EDITOR nvim
@@ -63,6 +65,9 @@ set -gx XDG_CACHE_HOME "$HOME/.cache"
 if test -f /opt/homebrew/bin/brew
     eval (/opt/homebrew/bin/brew shellenv)
 end
+
+# Disable quarantine for Homebrew casks
+set -gx HOMEBREW_CASK_OPTS "--no-quarantine"
 
 # Load work related config, if it exists
 if test -f $HOME/.config/fish/work.fish
